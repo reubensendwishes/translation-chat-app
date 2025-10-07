@@ -1,0 +1,111 @@
+{
+  "website": { "name": "悄悄龍" },
+  "common": { "submit": "送出", "nextStep": "下一步", "accept": "接受", "refuse": "拒絕" },
+  "navbar": {
+    "start": "開始聊天",
+    "about": "關於悄悄龍",
+    "post": {
+      "title": "創建貼文",
+      "publish": "發佈",
+      "pickerHint": "請選擇要上傳的圖片",
+      "pickerBtn": "選擇圖片",
+      "placeholder": "請輸入貼文內容...",
+      "text": "貼文文本",
+      "img": "貼文圖像"
+    },
+    "notification": {
+      "title": "通知",
+      "friendRequest": "向你發出好友邀請"
+    }
+  },
+  "footer": {
+    "followUs": "追蹤我們",
+    "phone": "電話",
+    "fax": "傳真",
+    "address": {
+      "label": "地址",
+      "value": "**市**區**路***巷*號"
+    },
+    "email": "信箱"
+  },
+  "home": {
+    "slide1": {
+      "verse1": "綿綿思念",
+      "verse2": "凝結天上雲",
+      "verse3": "乘風過海為撫佳人心"
+    },
+    "slide2": {
+      "verse1": "乘風過海",
+      "verse2": "為撫佳人心",
+      "verse3": "綿綿思念凝結天上雲"
+    },
+    "summary": {
+      "learnMore": "了解更多"
+    },
+    "aboutSummary": {
+      "title": "關於悄悄龍",
+      "subtitle": "傳說中的龍",
+      "description": "我也不知道要說啥，總之這是about頁面的摘要，總之就是這樣。我也不知道要說啥，總之這是about頁面的摘要，總之就是這樣。我也不知道要說啥，總之這是about頁面的摘要，總之就是這樣。"
+    }
+  },
+  "profile": {
+    "post": "貼文",
+    "friend": "朋友",
+    "editProfile": "編輯個人檔案",
+    "addFriend": "增加好友",
+    "requestSent": "已送出邀請",
+    "noPost": "沒有貼文",
+    "loadFailed": "個人檔案無法顯示",
+    "detail": { "title": "{username}的貼文" },
+    "receivedRequest": "回覆好友邀請",
+    "deleteFriend": "刪除好友"
+  },
+  "editProfile": {
+    "title": "編輯個人檔案",
+    "changeAvatar": "變更頭像",
+    "bio": "個人簡介"
+  },
+  "message": {
+    "message": "訊息",
+    "newMessage": "新訊息",
+    "chat": "聊天",
+    "online": "上線中",
+    "offline": "離線中"
+  },
+  "auth": {
+    "login": "登入",
+    "signUp": "註冊",
+    "ctn": {
+      "alreadyAccount": "已經有帳號了嗎？",
+      "noAccount": "沒有帳號嗎？"
+    },
+    "email": "電子郵件地址",
+    "password": "密碼",
+    "fullName": "全名",
+    "username": "用戶名稱",
+    "usernameOrEmail": "用戶名稱或電子郵件地址",
+    "or": "或"
+  },
+  "validation": {
+    "common": {
+      "required": "此欄位必填"
+    },
+    "email": {
+      "invalid": "請輸入有效的email"
+    },
+    "password": {
+      "minLength": "密碼至少需要6個字元",
+      "requireLowercase": "密碼至少需要1個小寫字母",
+      "requireUppercase": "密碼至少需要1個大寫字母",
+      "requireNumber": "密碼至少需要1個數字"
+    },
+    "fullName": {
+      "maxLength": "全名不能超過64個字元"
+    },
+    "username": {
+      "maxLength": "用戶名稱不能超過30個字元",
+      "invalidCharacters": "用戶名稱不能用-和_以外的特殊字元",
+      "alreadyTaken": "用戶名稱已被使用"
+    }
+  }
+}

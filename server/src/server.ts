@@ -1,0 +1,67 @@
+import express from 'express'
+import { createServer } from 'http'
+import mongoose from 'mongoose'
+import cors from 'cors'
+import helmet from 'helmet'
+import compression from 'compression'
+import morgan from 'morgan'
+import cookieParser from 'cookie-parser'
+
+import { config } from './config'
+import authRouter from './routes/auth'
+import usersRouter from './routes/users'
+import postsRouter from './routes/posts'
+import conversationsRouter from './routes/conversations'
+import friendshipsRouter from './routes/friendships'
+import messagesRouter from './routes/messages'
+import { initializeSocket } from './socket'
+
+const app = express()
+const server = createServer(app)
+
+// middleware
+app.use(morgan('dev'))
+app.use(helmet())
+app.use(compression())
+app.use(cors({ origin: config.CLIENT_URL, credentials: true }))
+app.use(cookieParser())
+app.use(express.json({ limit: '10mb' }))
+
+// routes
+app.use('/api/auth', authRouter)
+app.use('/api/user', usersRouter)
+app.use('/api/posts', postsRouter)
+app.use('/api/friendship', friendshipsRouter)
+app.use('/api/conversation', conversationsRouter)
+app.use('/api/message', messagesRouter)
+
+// MongoDB connection
+mongoose
+	.connect(config.MONGO_URI)
+	.then(() => console.log('MongoDB connected'))
+	.catch((err) => {
+		console.error('MongoDB connection error:', err)
+		process.exit(1)
+	})
+
+// initialize Socket.io
+const io = initializeSocket(server)
+app.set('io', io)
+
+// start server
+server.listen(config.PORT, () => {
+	console.log(`Server running at http://localhost:${config.PORT}`)
+})
+
+// shutdown
+const gracefulShutdown = async (signal: string) => {
+	console.log(`Received ${signal}. Closing server and MongoDB connection...`)
+	server.close(async (err) => {
+		if (err) process.exit(1)
+		await mongoose.disconnect()
+		console.log('MongoDB disconnected')
+		process.exit(0)
+	})
+}
+process.on('SIGINT', () => gracefulShutdown('SIGINT'))
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'))

@@ -1,0 +1,113 @@
+{
+  "website": { "name": "Thì Thầm Rồng" },
+  "common": {
+    "submit": "Gửi",
+    "nextStep": "Bước tiếp theo",
+    "accept": "Chấp nhận",
+    "refuse": "Từ chối"
+  },
+  "navbar": {
+    "start": "Bắt đầu trò chuyện",
+    "about": "Về Thì Thầm Rồng",
+    "post": {
+      "title": "Tạo bài đăng",
+      "publish": "Đăng bài",
+      "placeholder": "Vui lòng nhập nội dung bài viết...",
+      "pickerHint": "Vui lòng chọn ảnh để tải lên",
+      "pickerBtn": "Chọn ảnh",
+      "text": "Nội dung bài viết",
+      "img": "hình ảnh bài viết"
+    },
+    "notification": {
+      "title": "Thông báo",
+      "friendRequest": "đã gửi lời mời kết bạn cho bạn"
+    }
+  },
+  "footer": {
+    "followUs": "Theo dõi chúng tôi",
+    "phone": "Điện thoại",
+    "fax": "Fax",
+    "address": { "label": "Địa chỉ", "value": "Số *, Hẻm ***, Đường **, Quận **, Thành phố **" },
+    "email": "Email"
+  },
+  "home": {
+    "slide1": {
+      "verse1": "Nỗi tương tư",
+      "verse2": "miên man hóa thành mây trời",
+      "verse3": "Theo gió vượt biển chỉ mong an ủi lòng giai nhân"
+    },
+    "slide2": {
+      "verse1": "Theo gió vượt",
+      "verse2": "biển chỉ mong an ủi lòng giai nhân",
+      "verse3": "Nỗi tương tư miên man hóa thành mây trời"
+    },
+    "summary": {
+      "learnMore": "Tìm hiểu thêm"
+    },
+    "aboutSummary": {
+      "title": "Về Thì Thầm Rồng",
+      "subtitle": "Truyền thuyết về rồng",
+      "description": "Tôi cũng không biết phải nói gì, tóm lại đây là bản tóm tắt của trang About, tóm lại là như vậy.Tôi cũng không biết phải nói gì, tóm lại đây là bản tóm tắt của trang About, tóm lại là như vậy."
+    }
+  },
+  "profile": {
+    "post": "Bài đăng",
+    "friend": "Bạn",
+    "editProfile": "Chỉnh sửa hồ sơ cá nhân",
+    "addFriend": "Thêm bạn",
+    "requestSent": "Đã gửi lời mời",
+    "noPost": "Không có bài đăng",
+    "loadFailed": "Không thể hiển thị hồ sơ cá nhân",
+    "detail": { "title": "Bài đăng của {username}" },
+    "receivedRequest": "Phản hồi lời mời kết bạn",
+    "deleteFriend": "Xóa bạn"
+  },
+  "editProfile": {
+    "title": "Chỉnh sửa hồ sơ cá nhân",
+    "changeAvatar": "Thay đổi ảnh đại diện",
+    "bio": "Giới thiệu bản thân"
+  },
+  "message": {
+    "message": "Tin nhắn",
+    "newMessage": "Tin nhắn mới",
+    "chat": "Trò chuyện",
+    "online": "Đang trực tuyến",
+    "offline": "Ngoại tuyến"
+  },
+  "auth": {
+    "login": "Đăng nhập",
+    "signUp": "Đăng ký",
+    "ctn": {
+      "alreadyAccount": "Bạn đã có tài khoản chưa?",
+      "noAccount": "Bạn chưa có tài khoản?"
+    },
+    "email": "Địa chỉ email",
+    "password": "Mật khẩu",
+    "fullName": "Họ và tên",
+    "username": "Tên người dùng",
+    "usernameOrEmail": "Tên người dùng hoặc email",
+    "or": "hoặc"
+  },
+  "validation": {
+    "common": {
+      "required": "Trường này là bắt buộc"
+    },
+    "email": {
+      "invalid": "Vui lòng nhập email hợp lệ"
+    },
+    "password": {
+      "minLength": "Mật khẩu phải có ít nhất 6 ký tự",
+      "requireLowercase": "Mật khẩu phải có ít nhất 1 chữ cái thường",
+      "requireUppercase": "Mật khẩu phải có ít nhất 1 chữ cái hoa",
+      "requireNumber": "Mật khẩu phải có ít nhất 1 chữ số"
+    },
+    "fullName": {
+      "maxLength": "Tên đầy đủ không được vượt quá 64 ký tự"
+    },
+    "username": {
+      "maxLength": "Tên người dùng không được vượt quá 30 ký tự",
+      "invalidCharacters": "Tên người dùng chỉ được chứa chữ cái, số, gạch ngang và gạch dưới",
+      "alreadyTaken": "Tên người dùng này đã được sử dụng"
+    }
+  }
+}
