@@ -1,0 +1,127 @@
+@use 'sass:string';
+@use 'sass:color';
+@use 'sass:map';
+
+$text-colors: (
+	primary: #1d6283,
+	secondary: #4f8b96,
+	muted: #92a9b9,
+	inverse: #fff,
+	'transparent': transparent,
+	warning: #fd1a1c,
+);
+
+$bg-colors: (
+	default: #fff,
+	secondary: #4f8b96,
+	muted: #92a9b9,
+	inverse: #1d6283,
+);
+
+:root {
+	@each $name, $color in $text-colors {
+		--color-text-#{$name}: #{$color};
+		--color-text-#{$name}-rgb: #{color.channel($color, 'red')
+			color.channel($color, 'green')
+			color.channel($color, 'blue')};
+	}
+	@each $name, $color in $bg-colors {
+		--color-bg-#{$name}: #{$color};
+	}
+	--color-primary-darken: #{color.adjust(map.get($text-colors, primary), $lightness: -5%)};
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	line-height: 1;
+	font-family: 'Huninn', sans-serif;
+}
+
+p {
+	margin: 0;
+}
+
+ul,
+ol {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+button {
+	background: none;
+	border: none;
+	padding: 0;
+}
+
+textarea {
+	resize: none;
+}
+
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+.pill {
+	border-radius: 50rem;
+}
+.d-flex {
+	display: flex;
+}
+.d-inline-flex {
+	display: inline-flex;
+}
+.show-md,
+.show-lg {
+	display: none;
+}
+@media (min-width: 744px) {
+	.show-md {
+		display: initial;
+	}
+}
+@media (min-width: 1280px) {
+	.show-lg {
+		display: initial;
+	}
+}
+
+@mixin shadow-color($color) {
+	&::before,
+	&::after {
+		background-color: $color;
+	}
+}
+@each $name, $color in $text-colors {
+	.text-#{$name} {
+		color: $color;
+	}
+}
+
+@each $name, $color in $bg-colors {
+	.bg-#{$name} {
+		background-color: $color;
+	}
+	.shadow-#{$name} {
+		&::before {
+			background-color: $color;
+		}
+		&::after {
+			background-color: $color;
+		}
+	}
+}
