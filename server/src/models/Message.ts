@@ -6,20 +6,21 @@ interface Message extends Document {
   text: string;
   attachments?: string[];
   createdAt: Date;
-  editedAt?: Date;
+  updatedAt: Date;
 }
 
-const MessageSchema = new Schema<Message>({
-  conversationId: {
-    type: Schema.Types.ObjectId,
-    ref: "Conversation",
-    required: true,
+const MessageSchema = new Schema<Message>(
+  {
+    conversationId: {
+      type: Schema.Types.ObjectId,
+      ref: "Conversation",
+      required: true,
+    },
+    senderId: { type: Schema.Types.ObjectId, ref: "User", requires: true },
+    text: { type: String, required: true },
+    attachments: { type: [String], default: [] },
   },
-  senderId: { type: Schema.Types.ObjectId, ref: "User", requires: true },
-  text: { type: String, required: true },
-  attachments: { type: [String], default: [] },
-  createdAt: { type: Date, default: Date.now },
-  editedAt: { type: Date },
-});
+  { timestamps: true }
+);
 
 export const Message = model<Message>("Message", MessageSchema);

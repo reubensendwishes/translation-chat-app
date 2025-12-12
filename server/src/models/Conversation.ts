@@ -11,21 +11,24 @@ interface Conversation extends Document {
   members: ConversationMember[];
   name?: string;
   avatar?: string;
-  createdAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const ConversationSchema = new Schema<Conversation>({
-  type: { type: String, enum: ["direct", "group"], required: true },
-  members: [
-    {
-      userId: { type: Schema.Types.ObjectId, ref: "User" },
-      joinedAt: { type: Date, default: Date.now },
-    },
-  ],
-  name: { type: String },
-  avatar: { type: String },
-  createdAt: { type: Date, default: Date.now },
-});
+const ConversationSchema = new Schema<Conversation>(
+  {
+    type: { type: String, enum: ["direct", "group"], required: true },
+    members: [
+      {
+        userId: { type: Schema.Types.ObjectId, ref: "User" },
+        joinedAt: { type: Date, default: Date.now },
+      },
+    ],
+    name: { type: String },
+    avatar: { type: String },
+  },
+  { timestamps: true }
+);
 
 export const Conversation = model<Conversation>(
   "Conversation",

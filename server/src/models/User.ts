@@ -6,7 +6,7 @@ interface User extends Document {
   email: string;
   hashedPassword: string;
   tokenVersion: number;
-  createdAt?: Date;
+  createdAt: Date;
   updatedAt?: Date;
 }
 const UserSchema = new Schema<User>(

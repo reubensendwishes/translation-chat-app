@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { config } from "../config";
 import User from "../models/User";
 
 const router = Router();
@@ -12,23 +13,17 @@ interface TokenPayload {
   version: number;
 }
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
-const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const ACCESS_TOKEN_EXPIRY = "15m";
 const REFRESH_TOKEN_EXPIRY = "7d";
-
-if (!ACCESS_TOKEN_SECRET || !REFRESH_TOKEN_SECRET) {
-  throw new Error("缺少環境變數：ACCESS_TOKEN_SECRET 或 REFRESH_TOKEN_SECRET");
-}
 
 const generateTokens = (userId: string, email: string, version: number) => {
   const payload: TokenPayload = { userId, email, version };
 
-  const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
+  const accessToken = jwt.sign(payload, config.ACCESS_TOKEN_SECRET, {
     expiresIn: ACCESS_TOKEN_EXPIRY,
   });
 
-  const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET, {
+  const refreshToken = jwt.sign(payload, config.REFRESH_TOKEN_SECRET, {
     expiresIn: REFRESH_TOKEN_EXPIRY,
   });
   return { accessToken, refreshToken };
@@ -174,7 +169,7 @@ router.post("/refresh", async (req: Request, res: Response) => {
 
     const decoded = jwt.verify(
       refreshToken,
-      REFRESH_TOKEN_SECRET
+      config.REFRESH_TOKEN_SECRET
     ) as TokenPayload;
 
     const user = await User.findById(decoded.userId);
