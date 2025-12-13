@@ -16,7 +16,7 @@
 				class="auth-input-group"
 			/>
 			<button
-				:disabled="submitDisabled || isLoading"
+				:disabled="submitDisabled"
 				class="btn text-inverse"
 				:class="isLoading ? 'bg-muted' : 'bg-inverse'"
 				type="submit"
@@ -29,7 +29,7 @@
 				<span class="text-muted">或</span>
 				<span class="auth-divider-line bg-muted"></span>
 			</div>
-			<div class="auth-feedback text-warning">{{ errorMessage }}</div>
+			<div class="auth-feedback text-warning">{{ formError }}</div>
 		</form>
 		<div class="auth-cta text-muted">
 			{{ authCta.content }}
@@ -51,54 +51,50 @@
 	import FloatLabelInput from '@/components/ui/auth/FloatLabelInput.vue'
 	import SpinnerIcon from '@/components/icons/SpinnerIcon.vue'
 
+	type AuthFeature = 'login' | 'signUp'
+	export type AuthCta = {
+		content: string
+		linkAdviceName: string
+		linkAdviceText: string
+	}
+	export type ValidationDatas = Record<string, ValidationData>
 	type Props = {
 		feature: AuthFeature
 		authCta: AuthCta
 		inputDatas: InputData[]
 		validationDatas?: ValidationDatas
 		isLoading: boolean
-		errorMessage: string
+		formError: string
 	}
-
 	type Emits = {
 		blur: [id: string, value: string]
 		submit: [formData: Record<string, string>]
 	}
 
-	type AuthFeature = 'login' | 'signUp'
-
-	export type AuthCta = {
-		content: string
-		linkAdviceName: string
-		linkAdviceText: string
-	}
-
-	export type ValidationDatas = Record<string, ValidationData>
-
-	const { authCta, feature, inputDatas, validationDatas, isLoading, errorMessage } =
+	const { authCta, feature, inputDatas, validationDatas, isLoading, formError } =
 		defineProps<Props>()
-
 	defineEmits<Emits>()
 
 	const buttonText = computed(() => (feature === 'login' ? '登入' : '註冊'))
-
 	const inputStyle: InputStyle = {
 		paddingX: 8,
 		fontSize: 15,
 		height: 40,
 	}
-
 	const formData = ref<Record<string, string>>({})
-
 	const inputEvent = computed(() => {
 		return validationDatas ? 'blur' : null
 	})
 
 	const submitDisabled = computed(() => {
 		if (validationDatas) {
-			return !!Object.values(validationDatas).find((item) => item.state !== 'valid')
+			return (
+				Object.values(validationDatas).some((item) => item.state === 'invalid') ||
+				isLoading ||
+				Object.values(formData.value).some((item) => item === '')
+			)
 		}
-		return false
+		return isLoading || Object.values(formData.value).some((item) => item === '')
 	})
 
 	onMounted(() => {

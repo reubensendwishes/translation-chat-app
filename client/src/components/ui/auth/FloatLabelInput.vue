@@ -16,7 +16,7 @@
 			:id="inputData.id"
 			:type="inputData.type"
 			v-model="model"
-			@[inputEvent]="inputBlurAction"
+			@[inputEvent]="emit('blur')"
 		/>
 		<label class="float-label" :class="{ floating: isFloating }" :for="inputData.id">{{
 			inputData.label
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-	import { computed, ref } from 'vue'
+	import { computed } from 'vue'
 	import GSymbol from '@/components/icons/GSymbol.vue'
 
 	export type InputData = {
@@ -47,7 +47,6 @@
 		fontSize: number
 		height: number
 	}
-
 	export type ValidationData = {
 		state: 'valid' | 'invalid' | 'unverified'
 		invalidFeedback: string
@@ -60,11 +59,11 @@
 		inputStyle: InputStyle
 		validationData?: ValidationData
 	}
-
 	const emit = defineEmits<Emits>()
 	const { inputData, inputStyle, validationData } = defineProps<Props>()
 	const model = defineModel<string>({})
 
+	const labelScale: number = 0.8
 	const labelTranslateY = computed(() => {
 		return (-(inputStyle.height - inputStyle.fontSize) / 2) * labelScale
 	})
@@ -75,9 +74,6 @@
 			inputStyle.fontSize * labelScale
 		)
 	})
-
-	const labelScale: number = 0.8
-
 	const isFloating = computed<boolean>(() => {
 		return model.value !== ''
 	})
@@ -90,11 +86,6 @@
 	const inputEvent = computed(() => {
 		return validationData ? 'blur' : null
 	})
-	const showStatusIcon = ref<boolean>(false)
-	const inputBlurAction = () => {
-		emit('blur')
-		showStatusIcon.value = true
-	}
 	const statusIconType = computed(() => {
 		if (validationData?.state === 'invalid') {
 			return 'cancel'

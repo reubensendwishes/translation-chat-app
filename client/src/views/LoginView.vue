@@ -4,7 +4,7 @@
 		:auth-cta="authCta"
 		:input-datas="inputDatas"
 		:is-loading="isLoading"
-		:error-message="errorMessage"
+		:form-error="formError"
 		@submit="handleSubmit"
 	/>
 </template>
@@ -32,21 +32,21 @@
 		},
 	]
 	const isLoading = ref<boolean>(false)
-	const errorMessage = ref<string>('')
+	const formError = ref<string>('')
 
 	const handleSubmit = async (formData: Record<string, string>) => {
 		if (isLoading.value) return
 		isLoading.value = true
-		errorMessage.value = ''
+		formError.value = ''
 		try {
 			await axios.post('/api/auth/login', formData)
 			router.push({ name: 'home' })
 		} catch (error) {
 			if (axios.isAxiosError(error) && error.response) {
-				errorMessage.value = error.response.data.message || '登入失敗'
+				formError.value = error.response.data.message || '登入失敗'
 			} else {
 				console.error('提交失敗:', error)
-				errorMessage.value = '網路錯誤，請稍後重試'
+				formError.value = '網路錯誤，請稍後重試'
 			}
 		} finally {
 			isLoading.value = false

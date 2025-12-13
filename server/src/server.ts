@@ -19,7 +19,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(compression());
-app.use(cors());
+app.use(cors({ origin: config.CLIENT_URL, credentials: true }));
 app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
 

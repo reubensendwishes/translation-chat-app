@@ -25,10 +25,10 @@
 	</footer>
 </template>
 <script setup lang="ts">
-	import LogoText from '../icons/LogoText.vue'
-	import FacebookIcon from '../icons/FacebookIcon.vue'
-	import InstagramIcon from '../icons/InstagramIcon.vue'
-	import YoutubeIcon from '../icons/YoutubeIcon.vue'
+	import LogoText from '@/components/icons/LogoText.vue'
+	import FacebookIcon from '@/components/icons/FacebookIcon.vue'
+	import InstagramIcon from '@/components/icons/InstagramIcon.vue'
+	import YoutubeIcon from '@/components/icons/YoutubeIcon.vue'
 	import type { Component } from 'vue'
 	type InfoKey = '電話' | '傳真' | '信箱' | '地址'
 	interface InfoItem {

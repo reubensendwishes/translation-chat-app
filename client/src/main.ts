@@ -13,6 +13,7 @@ import { setupAxiosInterceptors } from './utils/axiosConfig'
 const app = createApp(App)
 
 axios.defaults.withCredentials = true
+axios.defaults.baseURL = 'http://localhost:5000'
 
 app.use(createPinia())
 app.use(router)

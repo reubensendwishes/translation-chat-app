@@ -31,10 +31,10 @@
 
 <script setup lang="ts">
 	import { ref } from 'vue'
-	import LogoText from '../icons/LogoText.vue'
-	import GSymbol from '../icons/GSymbol.vue'
-	import HamburgerIcon from '../icons/HamburgerIcon.vue'
-	import ExpandMenuTransition from '../transitions/ExpandMenuTransition.vue'
+	import LogoText from '@/components/icons/LogoText.vue'
+	import GSymbol from '@/components/icons/GSymbol.vue'
+	import HamburgerIcon from '@/components/icons/HamburgerIcon.vue'
+	import ExpandMenuTransition from '@/components/transitions/ExpandMenuTransition.vue'
 
 	interface MenuItem {
 		name: string

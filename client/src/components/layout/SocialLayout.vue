@@ -4,7 +4,5 @@
 </template>
 
 <script setup lang="ts">
-	import SocialNav from '../ui/SocialNav.vue'
+	import SocialNav from '@/components/ui/social/SocialNav.vue'
 </script>
-
-<style scoped></style>

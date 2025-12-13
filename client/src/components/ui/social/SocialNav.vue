@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-	import LogoText from '../icons/LogoText.vue'
-	import GSymbol from '../icons/GSymbol.vue'
+	import LogoText from '@/components/icons/LogoText.vue'
+	import GSymbol from '@/components/icons/GSymbol.vue'
 	const userId = '123'
 </script>
 

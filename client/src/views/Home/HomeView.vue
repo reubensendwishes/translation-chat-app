@@ -17,11 +17,11 @@
 
 <script setup lang="ts">
 	import { onMounted, onUnmounted, ref } from 'vue'
-	import MarketingCarousel from '@/components/ui/MarketingCarousel.vue'
-	import type { CarouselImage } from '@/components/ui/MarketingCarousel.vue'
+	import MarketingCarousel from '@/components/ui/marketing/MarketingCarousel.vue'
+	import type { CarouselImage } from '@/components/ui/marketing/MarketingCarousel.vue'
 	import carouselImg1 from '@/assets/carousel-img1.jpg'
 	import carouselImg2 from '@/assets/carousel-img2.jpg'
-	import { debounce } from '@/composables/useUtils'
+	import { debounce } from '@/utils/helpers'
 	import AboutSummary from './AboutSummary.vue'
 
 	const images = ref<CarouselImage[]>([

@@ -5,7 +5,7 @@
 		:input-datas="inputDatas"
 		:validation-datas="validationDatas"
 		:is-loading="isLoading"
-		:error-message="errorMessage"
+		:form-error="formError"
 		@blur="validateField"
 		@submit="handleSubmit"
 	/>
@@ -18,6 +18,7 @@
 	import type { AuthCta, ValidationDatas } from '@/components/ui/auth/AuthPanel.vue'
 	import type { InputData } from '@/components/ui/auth/FloatLabelInput.vue'
 	import { useRouter } from 'vue-router'
+	import { removePrefix, kebabToCamel } from '@/utils/helpers'
 
 	type Validator = Record<string, (value: string) => string | Promise<string>>
 
@@ -66,6 +67,7 @@
 		},
 		username: async (value) => {
 			if (value.length > 30) return '用戶名稱不能超過30個字元'
+			if (!/^[a-zA-Z0-9_-]+$/.test(value)) return '用戶名稱不能用-和_以外的特殊字元'
 			try {
 				const res = await axios.get('/api/auth/check-username', {
 					params: { username: value },
@@ -83,11 +85,7 @@
 	const validationDatas = ref<ValidationDatas>({})
 	const validateField = async (id: InputData['id'], value: string) => {
 		validationDatas.value[id].invalidFeedback = ''
-
-		const validatorType = id.replace(/^[^-]+-[^-]+-/, '').replace(/-(.)/g, (_, char) => {
-			return char.toUpperCase()
-		})
-
+		const validatorType = kebabToCamel(removePrefix(id, 'sign-up-'))
 		const commonError = await validator.common(value)
 		if (commonError !== '') {
 			validationDatas.value[id].invalidFeedback = commonError
@@ -103,20 +101,31 @@
 		}
 	}
 	const isLoading = ref<boolean>(false)
-	const errorMessage = ref<string>('')
+	const formError = ref<string>('')
 	const handleSubmit = async (formData: Record<string, string>) => {
 		if (isLoading.value) return
 		isLoading.value = true
-		errorMessage.value = ''
+		formError.value = ''
 		try {
-			await axios.post('/api/auth/signup', formData)
-			router.push({ name: 'login' })
+			if (Object.values(validationDatas.value).some((item) => item.state === 'unverified')) {
+				Object.keys(formData).forEach((id) => {
+					validateField(id, formData[id])
+				})
+				return
+			}
+			const res = await axios.post('/api/auth/signup', {
+				email: formData['sign-up-email'],
+				password: formData['sign-up-password'],
+				fullName: formData['sign-up-full-name'],
+				username: formData['sign-up-username'],
+			})
+			router.push(`/profile/${res.data.user.username}`)
 		} catch (error) {
 			if (axios.isAxiosError(error) && error.response) {
-				errorMessage.value = error.response.data.message || '註冊失敗'
+				formError.value = error.response.data.message || '註冊失敗'
 			} else {
 				console.error('提交失敗:', error)
-				errorMessage.value = '網路錯誤，請稍後重試'
+				formError.value = '網路錯誤，請稍後重試'
 			}
 		} finally {
 			isLoading.value = false

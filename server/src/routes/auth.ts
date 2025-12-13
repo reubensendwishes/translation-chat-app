@@ -32,11 +32,9 @@ const generateTokens = (userId: string, email: string, version: number) => {
 router.get("/check-username", async (req: Request, res: Response) => {
   try {
     const { username } = req.query;
-
-    if (!username || typeof username === "string") {
+    if (!username || typeof username !== "string") {
       return res.status(400).json({ available: false });
     }
-
     const existingUser = await User.findOne({ username });
     res.json({ available: !existingUser });
   } catch (error) {
@@ -50,6 +48,7 @@ router.post("/signup", async (req: Request, res: Response) => {
     const { email, password, fullName, username } = req.body;
 
     if (!email || !password || !fullName || !username) {
+      console.error(email, password, fullName, username);
       return res.status(400).json({ message: "所有欄位為必填" });
     }
 
