@@ -41,11 +41,11 @@ export const useAuth = () => {
 	}
 
 	const login = async (
-		email: string,
+		identifier: string,
 		password: string,
 	): Promise<{ success: boolean; message?: string }> => {
 		try {
-			const res = await axios.post('/api/auth/login', { email, password })
+			const res = await axios.post('/api/auth/login', { identifier, password })
 
 			const { accessToken, user } = res.data
 			authStore.setAuth(accessToken, user)

@@ -105,25 +105,41 @@ router.post("/signup", async (req: Request, res: Response) => {
 
 router.post("/login", async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { identifier, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ message: "email和密碼為必填" });
+    if (!identifier || !password) {
+      return res.status(400).json({ message: "電子郵件/用戶名稱和密碼為必填" });
     }
 
-    const user = await User.findOne({ email });
+    let query;
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]{2,}$/;
+    const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+    if (emailRegex.test(identifier)) {
+      query = { email: identifier };
+    } else if (usernameRegex.test(identifier)) {
+      query = { username: identifier };
+    } else {
+      return res.status(401).json({
+        errorCode: "INVALID_CREDENTIALS",
+        message: "登入資訊錯誤",
+      });
+    }
+    const user = await User.findOne(query);
+
     if (!user) {
-      return res
-        .status(401)
-        .json({ errorCode: "INVALID_CREDENTIALS", message: "email或密碼錯誤" });
+      return res.status(401).json({
+        errorCode: "INVALID_CREDENTIALS",
+        message: "登入資訊錯誤",
+      });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
 
-    if (!isPasswordValid || !user) {
-      return res
-        .status(401)
-        .json({ errorCode: "INVALID_CREDENTIALS", message: "email或密碼錯誤" });
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        errorCode: "INVALID_CREDENTIALS",
+        message: "登入資訊錯誤",
+      });
     }
 
     const { accessToken, refreshToken } = generateTokens(

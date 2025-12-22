@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/Home/HomeView.vue'
 import { useNavigationStore } from '@/stores/NavigationStore'
 import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,7 @@ const router = createRouter({
 			component: () => import('../views/LoginView.vue'),
 			meta: {
 				layout: 'AuthLayout',
+				requiresGuest: true,
 			},
 		},
 		{
@@ -28,6 +30,7 @@ const router = createRouter({
 			component: () => import('../views/SignUpView.vue'),
 			meta: {
 				layout: 'AuthLayout',
+				requiresGuest: true,
 			},
 		},
 		{
@@ -39,11 +42,12 @@ const router = createRouter({
 			},
 		},
 		{
-			path: '/profile/:userName',
+			path: '/profile/:username',
 			name: 'profile',
 			component: () => import('../views/ProfileView.vue'),
 			meta: {
 				layout: 'SocialLayout',
+				requiresAuth: true,
 			},
 		},
 		{
@@ -52,6 +56,7 @@ const router = createRouter({
 			component: () => import('../views/EditProfileView.vue'),
 			meta: {
 				layout: 'SocialLayout',
+				requiresAuth: true,
 			},
 		},
 		{
@@ -60,6 +65,7 @@ const router = createRouter({
 			component: () => import('../views/MessageView.vue'),
 			meta: {
 				layout: 'SocialLayout',
+				requiresAuth: true,
 			},
 		},
 	],
@@ -68,6 +74,22 @@ router.beforeEach((to, from) => {
 	const navigationStore = useNavigationStore()
 	const { unprocessedPrevRoute } = storeToRefs(navigationStore)
 	unprocessedPrevRoute.value = from.fullPath
+
+	const authStore = useAuthStore()
+	const { isLoggedIn, user } = storeToRefs(authStore)
+
+	if (to.meta.requiresAuth && !isLoggedIn.value) {
+		return {
+			name: 'login',
+			query: {
+				next: to.fullPath,
+			},
+		}
+	}
+	if (to.meta.requiresGuest && isLoggedIn.value) {
+		return `/profile/${user.value?.username}`
+	}
+	return
 })
 
 export default router

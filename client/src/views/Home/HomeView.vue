@@ -58,6 +58,7 @@
 		updateCarouselStyle()
 		window.addEventListener('resize', debounceUpdateCarousel)
 	})
+
 	onUnmounted(() => {
 		window.removeEventListener('resize', debounceUpdateCarousel)
 	})

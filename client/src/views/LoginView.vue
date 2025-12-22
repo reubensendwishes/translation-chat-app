@@ -10,21 +10,30 @@
 </template>
 
 <script setup lang="ts">
-	import axios from 'axios'
-	import { ref } from 'vue'
-	import { useRouter } from 'vue-router'
+	import { onMounted, ref } from 'vue'
+	import { useRoute, useRouter } from 'vue-router'
+	import type { LocationQueryValue } from 'vue-router'
 	import AuthPanel from '@/components/ui/auth/AuthPanel.vue'
 	import type { AuthCta } from '@/components/ui/auth/AuthPanel.vue'
 	import type { InputData } from '@/components/ui/auth/FloatLabelInput.vue'
+	import { useAuth } from '@/composables/useAuth'
+	import { useAuthStore } from '@/stores/AuthStore'
+	import { storeToRefs } from 'pinia'
 
+	const { login } = useAuth()
+
+	const route = useRoute()
 	const router = useRouter()
+	const authStore = useAuthStore()
+	const { user } = storeToRefs(authStore)
+
 	const authCta: AuthCta = {
 		content: '沒有帳號嗎？',
 		linkAdviceName: 'signUp',
 		linkAdviceText: '註冊',
 	}
 	const inputDatas: InputData[] = [
-		{ type: 'text', id: 'login-username-email', label: '用戶名稱或電子郵件地址' },
+		{ type: 'text', id: 'login-identifier', label: '用戶名稱或電子郵件地址' },
 		{
 			type: 'password',
 			id: 'login-password',
@@ -34,22 +43,39 @@
 	const isLoading = ref<boolean>(false)
 	const formError = ref<string>('')
 
+	const validateRedirect = (path?: LocationQueryValue | LocationQueryValue[]): string | null => {
+		if (!path || typeof path !== 'string') {
+			return null
+		}
+		const resolved = router.resolve(path)
+		if (resolved.matched.length === 0) {
+			return null
+		}
+		return path
+	}
+
 	const handleSubmit = async (formData: Record<string, string>) => {
 		if (isLoading.value) return
 		isLoading.value = true
 		formError.value = ''
-		try {
-			await axios.post('/api/auth/login', formData)
-			router.push({ name: 'home' })
-		} catch (error) {
-			if (axios.isAxiosError(error) && error.response) {
-				formError.value = error.response.data.message || '登入失敗'
+
+		const result = await login(formData['login-identifier'], formData['login-password'])
+		if (result.success) {
+			const nextPath = validateRedirect(route.query.next)
+			if (nextPath) {
+				router.push(nextPath)
+			} else if (user.value) {
+				router.push(`/profile/${user.value.username}`)
 			} else {
-				console.error('提交失敗:', error)
-				formError.value = '網路錯誤，請稍後重試'
+				router.push('/')
 			}
-		} finally {
-			isLoading.value = false
+		} else {
+			formError.value = result.message || '登入失敗'
 		}
+
+		isLoading.value = false
 	}
+	onMounted(() => {
+		validateRedirect()
+	})
 </script>
