@@ -30,7 +30,4 @@ const ConversationSchema = new Schema<Conversation>(
   { timestamps: true }
 );
 
-export const Conversation = model<Conversation>(
-  "Conversation",
-  ConversationSchema
-);
+export default model<Conversation>("Conversation", ConversationSchema);

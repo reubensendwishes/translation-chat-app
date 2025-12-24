@@ -4,17 +4,18 @@
 			<img class="user-avatar pill" :src="user.avatar" :alt="user.id" />
 			<div class="wrapper">
 				<div class="user-id">{{ user.id }}</div>
-				<RouterLink class="edit-btn btn pill text-inverse bg-inverse" to="/editProfile"
-					>編輯個人檔案</RouterLink
-				>
+				<div class="profile-stats d-flex">
+					<div v-for="(stat, index) in profileStats" :key="index" class="profile-stat">
+						<span>{{ stat.count }}</span
+						><br /><span>{{ stat.name }}</span>
+					</div>
+				</div>
 			</div>
 			<div class="user-description text-secondary">{{ user.description }}</div>
-		</div>
-		<div class="profile-stats d-flex">
-			<div v-for="(stat, index) in profileStats" :key="index" class="profile-stat">
-				<span>{{ stat.count }}</span
-				><br /><span class="text-muted">{{ stat.name }}</span>
-			</div>
+			<RouterLink class="edit-btn btn text-inverse bg-inverse" to="/editProfile"
+				>編輯個人檔案</RouterLink
+			>
+			<button class="edit-btn btn text-inverse bg-inverse">添加好友</button>
 		</div>
 		<div class="profile-tabs d-flex">
 			<button
@@ -89,22 +90,20 @@
 		width: 77px;
 	}
 	.user-id {
-		font-size: 21px;
 		margin-bottom: 10px;
 	}
-	.edit-btn {
-		padding: 6px 12px;
+	.profile-stats {
+		text-align: center;
+		gap: 32px;
 	}
 	.user-description {
 		flex-basis: 100%;
 	}
-	.profile-stats {
-		padding: 11px 16px 10px;
-		border-top: 1px var(--color-text-muted) solid;
-		text-align: center;
-		justify-content: space-around;
-	}
 
+	.edit-btn {
+		padding: 6px 12px;
+		border-radius: 8px;
+	}
 	.profile-tabs {
 		padding: 10px 16px 11px;
 		border-bottom: 1px var(--color-text-muted) solid;

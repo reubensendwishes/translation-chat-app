@@ -6,8 +6,9 @@ interface User extends Document {
   email: string;
   hashedPassword: string;
   tokenVersion: number;
+  description?: string;
   createdAt: Date;
-  updatedAt?: Date;
+  updatedAt: Date;
 }
 const UserSchema = new Schema<User>(
   {
@@ -22,6 +23,7 @@ const UserSchema = new Schema<User>(
     },
     hashedPassword: { type: String, required: true },
     tokenVersion: { type: Number, default: 0 },
+    description: { type: String, maxlength: 150 },
   },
   { timestamps: true }
 );

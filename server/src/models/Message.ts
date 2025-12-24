@@ -16,11 +16,11 @@ const MessageSchema = new Schema<Message>(
       ref: "Conversation",
       required: true,
     },
-    senderId: { type: Schema.Types.ObjectId, ref: "User", requires: true },
+    senderId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     text: { type: String, required: true },
     attachments: { type: [String], default: [] },
   },
   { timestamps: true }
 );
 
-export const Message = model<Message>("Message", MessageSchema);
+export default model<Message>("Message", MessageSchema);
