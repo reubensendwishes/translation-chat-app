@@ -5,8 +5,9 @@ interface User extends Document {
   username: string;
   email: string;
   hashedPassword: string;
-  tokenVersion: number;
+  avatar?: string;
   description?: string;
+  tokenVersion: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -22,8 +23,9 @@ const UserSchema = new Schema<User>(
       trim: true,
     },
     hashedPassword: { type: String, required: true },
-    tokenVersion: { type: Number, default: 0 },
     description: { type: String, maxlength: 150 },
+    avatar: { type: String },
+    tokenVersion: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

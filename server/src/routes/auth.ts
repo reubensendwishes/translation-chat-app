@@ -173,7 +173,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
 router.post("/refresh", async (req: Request, res: Response) => {
   try {
-    const { refreshToken } = req.cookies.refreshToken;
+    const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
       return res.status(401).json({
@@ -201,9 +201,8 @@ router.post("/refresh", async (req: Request, res: Response) => {
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(
       decoded.userId,
       decoded.email,
-      decoded.version
+      user.tokenVersion
     );
-
     res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

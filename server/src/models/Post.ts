@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import type { Document } from "mongoose";
-import User from "./User";
 
 interface Post extends Document {
   content: string;

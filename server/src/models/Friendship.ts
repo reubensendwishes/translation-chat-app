@@ -17,4 +17,7 @@ const FriendShipSchema = new Schema<FriendShip>(
   { timestamps: true }
 );
 
+FriendShipSchema.index({ requester: 1, status: 1 });
+FriendShipSchema.index({ recipient: 1, status: 1 });
+
 export default model<FriendShip>("FriendShip", FriendShipSchema);

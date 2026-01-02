@@ -1,5 +1,11 @@
 <template>
-	<svg class="spinner" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+	<svg
+		class="spinner"
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 100 100"
+		fill="none"
+		:style="{ '--spinner-color': `var(--color-text-${spinnerColor})` }"
+	>
 		<rect
 			v-for="n in 8"
 			:key="n"
@@ -15,7 +21,13 @@
 		></rect>
 	</svg>
 </template>
+<script setup lang="ts">
+	type Props = {
+		spinnerColor?: 'primary' | 'inverse'
+	}
 
+	const { spinnerColor = 'primary' } = defineProps<Props>()
+</script>
 <style scoped>
 	.spinner {
 		animation: spin 1s steps(8) infinite;
@@ -29,6 +41,6 @@
 		}
 	}
 	.rect-fill {
-		fill: var(--color-bg-default);
+		fill: var(--spinner-color);
 	}
 </style>

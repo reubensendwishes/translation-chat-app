@@ -12,6 +12,8 @@ import cookieParser from "cookie-parser";
 
 import { config } from "./config";
 import authRouter from "./routes/auth";
+import userRouter from "./routes/user";
+import postRouter from "./routes/post";
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use(express.json({ limit: "10mb" }));
 
 // routes
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+app.use("/api/posts", postRouter);
 
 app.get("/api", (req: Request, res: Response) => {
   res.json({ message: "Backend is working!" });
