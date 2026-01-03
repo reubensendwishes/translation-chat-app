@@ -43,12 +43,8 @@
 <script setup lang="ts">
 	import { computed, onMounted, ref } from 'vue'
 	import LogoText from '@/components/icons/LogoText.vue'
-	import type {
-		InputData,
-		InputStyle,
-		ValidationData,
-	} from '@/components/ui/auth/FloatLabelInput.vue'
-	import FloatLabelInput from '@/components/ui/auth/FloatLabelInput.vue'
+	import type { InputData, InputStyle, ValidationData } from '@/components/ui/FloatLabelInput.vue'
+	import FloatLabelInput from '@/components/ui/FloatLabelInput.vue'
 	import SpinnerIcon from '@/components/icons/SpinnerIcon.vue'
 
 	type AuthFeature = 'login' | 'signUp'

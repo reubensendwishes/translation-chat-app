@@ -3,7 +3,7 @@
 		<label class="field-label" :for="field.label">{{ field.label }}</label>
 		<template v-if="field.type">
 			<textarea
-				class="field-content"
+				class="field-content text-primary"
 				v-model="model"
 				:name="field.label"
 				:id="field.label"
@@ -31,6 +31,7 @@
 	.profile-field {
 		position: relative;
 		flex-direction: column;
+		text-align: start;
 		font-size: 17px;
 	}
 	.field-label {

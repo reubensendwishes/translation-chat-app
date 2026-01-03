@@ -1,12 +1,12 @@
 import 'vue-router'
-import MarketingLayout from './components/layout/MarketingLayout.vue'
-import SocialLayout from './components/layout/SocialLayout.vue'
-import AuthLayout from './components/layout/AuthLayout.vue'
+import TopNavLayout from './components/layout/TopNavLayout.vue'
+import BottomNavLayout from './components/layout/BottomNavLayout.vue'
+import NoNavLayout from './components/layout/NoNavLayout.vue'
 
 export const layouts = {
-	MarketingLayout,
-	SocialLayout,
-	AuthLayout,
+	TopNavLayout,
+	BottomNavLayout,
+	NoNavLayout,
 } as const
 
 declare module 'vue-router' {
@@ -27,7 +27,6 @@ export interface Contact {
 }
 
 export interface BaseField {
-	id: string
 	label: string
 	value: string
 }

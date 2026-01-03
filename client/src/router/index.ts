@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/Home/HomeView.vue'
+import HomeView from '@/views/home/HomeView.vue'
 import { useNavigationStore } from '@/stores/NavigationStore'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/AuthStore'
@@ -12,7 +12,7 @@ const router = createRouter({
 			name: 'home',
 			component: HomeView,
 			meta: {
-				layout: 'MarketingLayout',
+				layout: 'TopNavLayout',
 			},
 		},
 		{
@@ -20,7 +20,7 @@ const router = createRouter({
 			name: 'login',
 			component: () => import('../views/LoginView.vue'),
 			meta: {
-				layout: 'AuthLayout',
+				layout: 'NoNavLayout',
 				requiresGuest: true,
 			},
 		},
@@ -29,7 +29,7 @@ const router = createRouter({
 			name: 'signUp',
 			component: () => import('../views/SignUpView.vue'),
 			meta: {
-				layout: 'AuthLayout',
+				layout: 'NoNavLayout',
 				requiresGuest: true,
 			},
 		},
@@ -38,7 +38,7 @@ const router = createRouter({
 			name: 'about',
 			component: () => import('../views/AboutView.vue'),
 			meta: {
-				layout: 'MarketingLayout',
+				layout: 'TopNavLayout',
 			},
 		},
 		{
@@ -46,7 +46,7 @@ const router = createRouter({
 			name: 'profile',
 			component: () => import('../views/ProfileView.vue'),
 			meta: {
-				layout: 'SocialLayout',
+				layout: 'BottomNavLayout',
 				requiresAuth: true,
 			},
 		},
@@ -55,7 +55,7 @@ const router = createRouter({
 			name: 'editProfile',
 			component: () => import('../views/EditProfileView.vue'),
 			meta: {
-				layout: 'SocialLayout',
+				layout: 'BottomNavLayout',
 				requiresAuth: true,
 			},
 		},
@@ -64,8 +64,16 @@ const router = createRouter({
 			name: 'message',
 			component: () => import('../views/MessageView.vue'),
 			meta: {
-				layout: 'SocialLayout',
+				layout: 'BottomNavLayout',
 				requiresAuth: true,
+			},
+		},
+		{
+			path: '/:pathMatch(.*)*',
+			name: 'NotFound',
+			component: () => import('../views/NotFoundView.vue'),
+			meta: {
+				layout: 'NoNavLayout',
 			},
 		},
 	],

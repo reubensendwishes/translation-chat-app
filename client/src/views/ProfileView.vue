@@ -4,8 +4,16 @@
 			<div class="user-info d-flex">
 				<img class="user-avatar pill" :src="userData?.avatar" :alt="profileUsername" />
 				<div class="wrapper">
-					<div class="user-username">{{ profileUsername }}</div>
-					<div class="profile-stats d-flex">
+					<div class="username-wrapper d-flex">
+						<span class="user-username">
+							{{ profileUsername }}
+						</span>
+						<button type="button" class="option-btn btn text-primary">
+							<GSymbol style="font-size: 16px">settings</GSymbol>
+						</button>
+					</div>
+
+					<div class="user-stats d-flex">
 						<div
 							v-for="(stat, index) in profileStats"
 							:key="index"
@@ -19,11 +27,11 @@
 				<div class="user-description text-secondary">{{ userData?.description }}</div>
 				<RouterLink
 					v-if="isOwner"
-					class="profile-btn btn text-inverse bg-inverse"
+					class="edit-btn btn text-inverse bg-inverse"
 					to="/editProfile"
 					>編輯個人檔案</RouterLink
 				>
-				<button v-else class="profile-btn btn text-inverse bg-inverse">添加好友</button>
+				<button v-else class="add-friend-btn btn text-inverse bg-inverse">添加好友</button>
 			</div>
 			<div class="profile-tabs d-flex">
 				<div
@@ -219,10 +227,18 @@
 	.user-avatar {
 		width: 77px;
 	}
-	.user-username {
+	.username-wrapper {
 		margin-bottom: 10px;
+		align-items: center;
 	}
-	.profile-stats {
+	.user-username {
+		margin-right: 4px;
+	}
+	.option-btn {
+		line-height: 0;
+		padding: 2px;
+	}
+	.user-stats {
 		text-align: center;
 		gap: 32px;
 	}
@@ -230,7 +246,8 @@
 		flex-basis: 100%;
 	}
 
-	.profile-btn {
+	.edit-btn,
+	.add-friend-btn {
 		font-size: 15px;
 		padding: 6px 12px;
 		border-radius: 8px;

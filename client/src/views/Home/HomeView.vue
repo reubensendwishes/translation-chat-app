@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<MarketingCarousel
+		<TopNavCarousel
 			class="text-inverse"
 			:images="images"
 			width="100%"
@@ -17,12 +17,12 @@
 
 <script setup lang="ts">
 	import { onMounted, onUnmounted, ref } from 'vue'
-	import MarketingCarousel from '@/components/ui/marketing/MarketingCarousel.vue'
-	import type { CarouselImage } from '@/components/ui/marketing/MarketingCarousel.vue'
+	import TopNavCarousel from '@/components/ui/topNav/TopNavCarousel.vue'
+	import type { CarouselImage } from '@/components/ui/topNav/TopNavCarousel.vue'
 	import carouselImg1 from '@/assets/carousel-img1.jpg'
 	import carouselImg2 from '@/assets/carousel-img2.jpg'
 	import { debounce } from '@/utils/helpers'
-	import AboutSummary from './AboutSummary.vue'
+	import AboutSummary from '@/views/home/AboutSummary.vue'
 
 	const images = ref<CarouselImage[]>([
 		{
