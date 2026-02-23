@@ -5,7 +5,7 @@
 		</div>
 		<div class="nav-right">
 			<RouterLink to="/message"><GSymbol style="font-size: 30px">chat</GSymbol></RouterLink>
-			<RouterLink :to="`/profile/${userId}`"
+			<RouterLink :to="`/profile/${user?.username}`"
 				><GSymbol style="font-size: 30px">account_circle</GSymbol></RouterLink
 			>
 		</div>
@@ -15,7 +15,10 @@
 <script setup lang="ts">
 	import LogoText from '@/components/icons/LogoText.vue'
 	import GSymbol from '@/components/icons/GSymbol.vue'
-	const userId = '123'
+	import { useAuthStore } from '@/stores/AuthStore'
+	import { storeToRefs } from 'pinia'
+	const authStore = useAuthStore()
+	const { user } = storeToRefs(authStore)
 </script>
 
 <style scoped>

@@ -1,8 +1,8 @@
 <template>
 	<main class="text-primary d-flex">
 		<ul class="contact-list bg-default d-inline-flex">
-			<li v-for="contact in contactList" :key="contact.id">
-				<img class="pill" :src="contact.avatar" :alt="contact.name" />
+			<li v-for="contact in contactList" :key="contact._id">
+				<img class="pill" :src="contact.avatar" :alt="contact.username" />
 			</li>
 		</ul>
 		<div class="chat-box d-flex">
@@ -11,10 +11,10 @@
 					<img
 						class="contact-avatar pill"
 						:src="currentContact.avatar"
-						:alt="currentContact.name"
+						:alt="currentContact.username"
 					/>
 					<div class="contact-info">
-						<div class="contact-name">{{ currentContact.name }}</div>
+						<div class="contact-name">{{ currentContact.username }}</div>
 						<div class="contact-state text-muted">{{ currentContact.state }}</div>
 					</div>
 				</div>
@@ -32,10 +32,13 @@
 			</div>
 			<div class="chat-input-wrapper pill">
 				<div
+					ref="chatInput"
 					class="chat-input"
 					role="textbox"
 					contenteditable="true"
 					data-placeholder="訊息......"
+					@keydown.enter.exact.prevent="sendMessage"
+					@input="updateMessageContent"
 				></div>
 			</div>
 		</div>
@@ -43,20 +46,68 @@
 </template>
 
 <script setup lang="ts">
-	import { ref } from 'vue'
+	import { onMounted, ref, useTemplateRef } from 'vue'
 	import type { Contact } from '@/types'
 	import ContactTest from '@/assets/contact-test.png'
 	import GSymbol from '@/components/icons/GSymbol.vue'
-	const contactList = ref<Contact[]>([{ avatar: ContactTest, id: '123', name: 'test' }])
-
+	import axios from 'axios'
+	const contactList = ref<Contact[]>([])
 	const currentContact = ref({
 		avatar: ContactTest,
-		name: 'reuben',
+		username: 'reuben',
 		state: '在線中',
 		messages: [
 			{ content: 'eresr', fromMe: true },
 			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
+			{ content: 'eresqwer', fromMe: false },
 		],
+	})
+	const chatInputRef = useTemplateRef('chatInput')
+	const messageContent = ref<string>('')
+	const updateMessageContent = () => {
+		messageContent.value = chatInputRef.value?.textContent || ''
+	}
+	const getInputValue = () => {
+		return chatInputRef.value?.innerText || ''
+	}
+	const clearInput = () => {
+		if (chatInputRef.value) {
+			chatInputRef.value.textContent = ''
+			messageContent.value = ''
+		}
+	}
+	const sendMessage = () => {
+		const content = getInputValue().trim()
+		if (content) {
+			console.log(content)
+			clearInput()
+			chatInputRef.value?.focus()
+		}
+	}
+
+	onMounted(async () => {
+		try {
+			const res = await axios.get('/api/user/friends')
+			contactList.value = res.data
+		} catch (error) {
+			console.error(error)
+		}
 	})
 </script>
 
@@ -108,7 +159,7 @@
 	.chat-content {
 		flex: 1;
 		overflow-y: auto;
-		flex-direction: column;
+		flex-direction: column-reverse;
 		align-items: start;
 		margin-left: 10px;
 	}
@@ -135,7 +186,6 @@
 	.chat-input {
 		padding: 10px;
 	}
-
 	.chat-input:empty::before {
 		content: attr(data-placeholder);
 		color: var(--color-text-muted);

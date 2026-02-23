@@ -1,15 +1,15 @@
-import { Schema, model } from "mongoose";
-import type { Document } from "mongoose";
+import { Schema, model } from 'mongoose'
+import type { Document } from 'mongoose'
 interface User extends Document {
-  fullName: string;
-  username: string;
-  email: string;
-  hashedPassword: string;
-  avatar?: string;
-  description?: string;
-  tokenVersion: number;
-  createdAt: Date;
-  updatedAt: Date;
+  fullName: string
+  username: string
+  email: string
+  hashedPassword: string
+  avatar?: string
+  description?: string
+  tokenVersion: number
+  createdAt: Date
+  updatedAt: Date
 }
 const UserSchema = new Schema<User>(
   {
@@ -27,7 +27,7 @@ const UserSchema = new Schema<User>(
     avatar: { type: String },
     tokenVersion: { type: Number, default: 0 },
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
-export default model<User>("User", UserSchema);
+export default model<User>('User', UserSchema)

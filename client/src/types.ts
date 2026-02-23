@@ -21,9 +21,10 @@ export interface Image {
 }
 
 export interface Contact {
-	id: string
+	_id: string
+	username: string
 	avatar: string
-	name: string
+	fullName: string
 }
 
 export interface BaseField {

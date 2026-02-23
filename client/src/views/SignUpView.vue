@@ -14,9 +14,9 @@
 <script setup lang="ts">
 	import { onMounted, ref } from 'vue'
 	import axios from 'axios'
-	import AuthPanel from '@/components/ui/auth/AuthPanel.vue'
-	import type { AuthCta, ValidationDatas } from '@/components/ui/auth/AuthPanel.vue'
-	import type { InputData } from '@/components/ui/auth/FloatLabelInput.vue'
+	import AuthPanel from '@/components/ui/AuthPanel.vue'
+	import type { AuthCta, ValidationDatas } from '@/components/ui/AuthPanel.vue'
+	import type { InputData } from '@/components/ui/FloatLabelInput.vue'
 	import { useRouter } from 'vue-router'
 	import { removePrefix, kebabToCamel } from '@/utils/helpers'
 
