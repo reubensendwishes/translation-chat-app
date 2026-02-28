@@ -25,13 +25,26 @@
 					</div>
 				</div>
 				<div class="user-description text-secondary">{{ userData?.description }}</div>
-				<RouterLink
-					v-if="isOwner"
-					class="edit-btn btn text-inverse bg-inverse"
-					to="/editProfile"
-					>編輯個人檔案</RouterLink
-				>
-				<button v-else class="add-friend-btn btn text-inverse bg-inverse">添加好友</button>
+				<template v-if="isOwner">
+					<RouterLink class="edit-btn btn text-inverse bg-inverse" to="/editProfile"
+						>編輯個人檔案</RouterLink
+					>
+				</template>
+				<template v-else>
+					<button
+						v-if="!isFriend && !hasSentRequest"
+						@click="handleSendFriendRequest"
+						class="friendship-btn btn text-inverse bg-inverse"
+					>
+						添加好友
+					</button>
+					<button
+						v-else-if="!isFriend"
+						class="friendship-btn btn text-inverse bg-inverse"
+					>
+						已送出邀請
+					</button>
+				</template>
 			</div>
 			<div class="profile-tabs d-flex">
 				<div
@@ -72,12 +85,16 @@
 
 <script setup lang="ts">
 	import { computed, onMounted, ref, onBeforeUnmount, useTemplateRef, nextTick } from 'vue'
+	import { storeToRefs } from 'pinia'
 	import { useRoute } from 'vue-router'
 	import axios from 'axios'
 	import GSymbol from '@/components/icons/GSymbol.vue'
 	import SpinnerIcon from '@/components/icons/SpinnerIcon.vue'
+	import { useFriend } from '@/composables/useFriend'
+	import { useFriendStore } from '@/stores/FriendStore'
 
 	type UserData = {
+		userId: string
 		fullName: string
 		description?: string
 		avatar?: string
@@ -96,7 +113,12 @@
 		createdAt: string
 	}
 	type PostTab = 'all' | 'marked'
+
 	const route = useRoute()
+	const { sendFriendRequest } = useFriend()
+	const friendStore = useFriendStore()
+	const { friends, sentRequests } = storeToRefs(friendStore)
+
 	const hasProfile = ref<boolean>(false)
 	const userData = ref<UserData | null>(null)
 	const profileUsername = route.params.username as string
@@ -193,6 +215,30 @@
 
 	const postTabIcons = ref<Record<PostTab, string>>({ all: 'post', marked: 'bookmark' })
 
+	const handleSendFriendRequest = async () => {
+		if (!userData.value) return
+		console.log(userData.value)
+
+		const result = await sendFriendRequest(userData.value.userId)
+		if (result?.success) {
+			console.log(result.message)
+		}
+	}
+
+	const isFriend = computed(() => {
+		if (!userData.value) {
+			return false
+		}
+		return friends.value.some((friend) => friend.friendData._id === userData.value!.userId)
+	})
+
+	const hasSentRequest = computed(() => {
+		if (!userData.value) {
+			return false
+		}
+		return sentRequests.value.some((request) => request.recipientId === userData.value!.userId)
+	})
+
 	onMounted(async () => {
 		try {
 			const res = await axios.get(`/api/user/${route.params.username}`)
@@ -247,7 +293,7 @@
 	}
 
 	.edit-btn,
-	.add-friend-btn {
+	.friendship-btn {
 		font-size: 15px;
 		padding: 6px 12px;
 		border-radius: 8px;

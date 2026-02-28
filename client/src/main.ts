@@ -8,6 +8,7 @@ import router from './router'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useAuth } from './composables/useAuth'
+import { useFriend } from './composables/useFriend'
 import { setupAxiosInterceptors } from './utils/axiosConfig'
 
 const app = createApp(App)
@@ -21,11 +22,14 @@ app.use(router)
 const authStore = useAuthStore()
 const { accessToken, isLoggedIn } = storeToRefs(authStore)
 const { initAuth } = authStore
+const { fetchFriendshipData } = useFriend()
+
 initAuth()
 
 const { refreshAccessToken } = useAuth()
 if (accessToken.value) {
 	await refreshAccessToken()
+	await fetchFriendshipData()
 }
 
 setInterval(

@@ -103,7 +103,7 @@
 
 	onMounted(async () => {
 		try {
-			const res = await axios.get('/api/user/friends')
+			const res = await axios.get('/api/friendship')
 			contactList.value = res.data
 		} catch (error) {
 			console.error(error)

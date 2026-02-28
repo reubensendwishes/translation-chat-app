@@ -38,3 +38,24 @@ export interface TextAreaField extends BaseField {
 }
 
 export type Field = TextAreaField
+
+export type UserData = {
+	_id: string
+	username: string
+	fullName: string
+	avatar: string
+}
+export type Friend = {
+	requestId: string
+	friendData: UserData
+}
+export type ReceivedRequest = {
+	requestId: string
+	requesterData: UserData
+	createdAt: Date
+}
+
+export type SentRequest = {
+	requestId: string
+	recipientId: string
+}

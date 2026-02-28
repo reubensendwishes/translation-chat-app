@@ -34,7 +34,7 @@ export const initializeSocket = (server: Server) => {
 			socket.userId = decoded.userId
 			socket.email = decoded.email
 			next()
-		} catch (error) {
+		} catch {
 			next(new Error('Invalid token'))
 		}
 	})
@@ -48,21 +48,13 @@ export const initializeSocket = (server: Server) => {
 
 				if (
 					!conversation ||
-					!conversation.members.some((member) => {
-						member.userId.toString() === socket.userId
-					})
+					!conversation.members.some(
+						(member) => member.userId.toString() === socket.userId,
+					)
 				) {
 					socket.emit('error', { message: 'Unauthorized' })
 					return
 				}
-
-				socket.join(conversationId)
-				console.log(`User ${socket.userId} joined conversation ${conversationId}`)
-
-				socket.to(conversationId).emit('user-joined', {
-					userId: socket.userId,
-					timestamp: new Date(),
-				})
 			} catch (error) {
 				console.error('加入對話失敗', error)
 				socket.emit('error', { message: 'Failed to join conversation' })
