@@ -13,14 +13,16 @@
 	import { onMounted, ref } from 'vue'
 	import { useRoute, useRouter } from 'vue-router'
 	import type { LocationQueryValue } from 'vue-router'
-	import AuthPanel from '@/components/ui/AuthPanel.vue'
-	import type { AuthCta } from '@/components/ui/AuthPanel.vue'
+	import AuthPanel from '@/components/auth/Panel.vue'
+	import type { AuthCta } from '@/components/auth/Panel.vue'
 	import type { InputData } from '@/components/ui/FloatLabelInput.vue'
 	import { useAuth } from '@/composables/useAuth'
 	import { useAuthStore } from '@/stores/AuthStore'
 	import { storeToRefs } from 'pinia'
+	import { useFriend } from '@/composables/useFriend'
 
 	const { login } = useAuth()
+	const { fetchFriendshipData } = useFriend()
 
 	const route = useRoute()
 	const router = useRouter()
@@ -61,6 +63,7 @@
 
 		const result = await login(formData['login-identifier'], formData['login-password'])
 		if (result.success) {
+			await fetchFriendshipData()
 			const nextPath = validateRedirect(route.query.next)
 			if (nextPath) {
 				router.push(nextPath)

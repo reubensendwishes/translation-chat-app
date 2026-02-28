@@ -1,5 +1,5 @@
 <template>
-	<div class="summary d-flex">
+	<section class="summary d-flex">
 		<div class="summary-text" :style="{ order: textPosition === 'right' ? 1 : 0 }">
 			<div class="summary-header d-flex">
 				<h2 class="summary-title text-primary">{{ title }}</h2>
@@ -22,11 +22,11 @@
 			</RouterLink>
 		</div>
 		<div class="summary-extra"><slot></slot></div>
-	</div>
+	</section>
 </template>
 
 <script setup lang="ts">
-	import ZhSpaces from './ZhSpaces.vue'
+	import ZhSpaces from '@/components/ui/ZhSpaces.vue'
 
 	export interface SummaryProps {
 		title: string

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<TopNavCarousel
+		<HomeCarousel
 			class="text-inverse"
 			:images="images"
 			width="100%"
@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 	import { onMounted, onUnmounted, ref } from 'vue'
-	import TopNavCarousel from '@/components/ui/topNav/TopNavCarousel.vue'
-	import type { CarouselImage } from '@/components/ui/topNav/TopNavCarousel.vue'
+	import HomeCarousel from '@/views/home/Carousel.vue'
+	import type { CarouselImage } from '@/views/home/Carousel.vue'
 	import carouselImg1 from '@/assets/carousel-img1.jpg'
 	import carouselImg2 from '@/assets/carousel-img2.jpg'
 	import { debounce } from '@/utils/helpers'

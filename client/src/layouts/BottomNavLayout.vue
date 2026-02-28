@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
-	import BottomNav from '@/components/ui/bottomNav/BottomNav.vue'
-	import OffCanvas from '../ui/OffCanvas.vue'
-	import NotificationList from '../ui/NotificationList.vue'
+	import BottomNav from '@/components/layout/BottomNav.vue'
+	import OffCanvas from '@/components/ui/OffCanvas.vue'
+	import NotificationList from '@/components/notification/List.vue'
 	import { ref } from 'vue'
 
 	const isNotificationPanelOpen = ref(false)

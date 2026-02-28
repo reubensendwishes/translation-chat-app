@@ -9,8 +9,8 @@
 </template>
 
 <script setup lang="ts">
-	import MarketingFooter from '@/components/ui/topNav/TopNavFooter.vue'
-	import MarketingNav from '@/components/ui/topNav/TopNav.vue'
+	import MarketingFooter from '@/components/layout/TopNavFooter.vue'
+	import MarketingNav from '@/components/layout/TopNav.vue'
 </script>
 
 <style scoped>

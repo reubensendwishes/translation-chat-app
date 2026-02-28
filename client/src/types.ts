@@ -1,7 +1,7 @@
 import 'vue-router'
-import TopNavLayout from './components/layout/TopNavLayout.vue'
-import BottomNavLayout from './components/layout/BottomNavLayout.vue'
-import NoNavLayout from './components/layout/NoNavLayout.vue'
+import TopNavLayout from './layouts/TopNavLayout.vue'
+import BottomNavLayout from './layouts/BottomNavLayout.vue'
+import NoNavLayout from './layouts/NoNavLayout.vue'
 
 export const layouts = {
 	TopNavLayout,
@@ -15,19 +15,19 @@ declare module 'vue-router' {
 	}
 }
 
-export interface Image {
+export type Image = {
 	name: string
 	src: string
 }
 
-export interface Contact {
+export type Contact = {
 	_id: string
 	username: string
 	avatar: string
 	fullName: string
 }
 
-export interface BaseField {
+export type BaseField = {
 	label: string
 	value: string
 }

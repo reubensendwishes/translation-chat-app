@@ -46,7 +46,7 @@
 		text-align: center;
 	}
 	.offcanvas-body {
-		height: 100%;
+		height: calc(100% - 60px);
 		padding: 0 16px;
 	}
 </style>

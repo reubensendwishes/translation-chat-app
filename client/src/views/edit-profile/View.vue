@@ -57,7 +57,7 @@
 	import { storeToRefs } from 'pinia'
 	import { useNavigationStore } from '@/stores/NavigationStore'
 	import type { Field } from '@/types'
-	import ProfileField from '@/components/ui/ProfileField.vue'
+	import ProfileField from '@/views/edit-profile/ProfileField.vue'
 
 	type MyUserData = {
 		fullName: string

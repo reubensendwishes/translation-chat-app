@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/home/HomeView.vue'
+import HomeView from '@/views/home/View.vue'
 import { useNavigationStore } from '@/stores/NavigationStore'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/AuthStore'
@@ -18,7 +18,7 @@ const router = createRouter({
 		{
 			path: '/login',
 			name: 'login',
-			component: () => import('../views/LoginView.vue'),
+			component: () => import('@/views/LoginView.vue'),
 			meta: {
 				layout: 'NoNavLayout',
 				requiresGuest: true,
@@ -27,7 +27,7 @@ const router = createRouter({
 		{
 			path: '/signup',
 			name: 'signUp',
-			component: () => import('../views/SignUpView.vue'),
+			component: () => import('@/views/SignUpView.vue'),
 			meta: {
 				layout: 'NoNavLayout',
 				requiresGuest: true,
@@ -36,7 +36,7 @@ const router = createRouter({
 		{
 			path: '/about',
 			name: 'about',
-			component: () => import('../views/AboutView.vue'),
+			component: () => import('@/views/AboutView.vue'),
 			meta: {
 				layout: 'TopNavLayout',
 			},
@@ -44,7 +44,7 @@ const router = createRouter({
 		{
 			path: '/profile/:username',
 			name: 'profile',
-			component: () => import('../views/ProfileView.vue'),
+			component: () => import('@/views/ProfileView.vue'),
 			meta: {
 				layout: 'BottomNavLayout',
 				requiresAuth: true,
@@ -53,7 +53,7 @@ const router = createRouter({
 		{
 			path: '/editProfile',
 			name: 'editProfile',
-			component: () => import('../views/EditProfileView.vue'),
+			component: () => import('@/views/edit-profile/View.vue'),
 			meta: {
 				layout: 'BottomNavLayout',
 				requiresAuth: true,
@@ -62,7 +62,7 @@ const router = createRouter({
 		{
 			path: '/message',
 			name: 'message',
-			component: () => import('../views/MessageView.vue'),
+			component: () => import('@/views/MessageView.vue'),
 			meta: {
 				layout: 'BottomNavLayout',
 				requiresAuth: true,
@@ -71,7 +71,7 @@ const router = createRouter({
 		{
 			path: '/:pathMatch(.*)*',
 			name: 'NotFound',
-			component: () => import('../views/NotFoundView.vue'),
+			component: () => import('@/views/NotFoundView.vue'),
 			meta: {
 				layout: 'NoNavLayout',
 			},

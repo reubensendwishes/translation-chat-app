@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-	import SummarySection, { type SummaryProps } from '@/components/ui/SummarySection.vue'
+	import SummarySection, { type SummaryProps } from '@/views/home/SummarySection.vue'
 	import type { Image } from '@/types'
 	import aboutImg1 from '@/assets/about-img1.jpg'
 	import aboutImg2 from '@/assets/about-img2.jpg'

@@ -28,7 +28,8 @@ $bg-colors: (
 	@each $name, $color in $bg-colors {
 		--color-bg-#{$name}: #{$color};
 	}
-	--color-primary-darken: #{color.adjust(map.get($text-colors, primary), $lightness: -5%)};
+	--color-primary-darken: #{color.adjust(map.get($text-colors, primary), $lightness: -10%)};
+	--color-secondary-darken: #{color.adjust(map.get($text-colors, secondary), $lightness: -10%)};
 }
 
 *,
