@@ -10,6 +10,7 @@ import { useAuthStore } from '@/stores/AuthStore'
 import { useAuth } from './composables/useAuth'
 import { useFriend } from './composables/useFriend'
 import { setupAxiosInterceptors } from './utils/axiosConfig'
+import { connectSocket } from './socket'
 
 const app = createApp(App)
 
@@ -30,6 +31,7 @@ const { refreshAccessToken } = useAuth()
 if (accessToken.value) {
 	await refreshAccessToken()
 	await fetchFriendshipData()
+	connectSocket(accessToken.value)
 }
 
 setInterval(

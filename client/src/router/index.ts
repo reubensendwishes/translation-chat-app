@@ -62,7 +62,7 @@ const router = createRouter({
 		{
 			path: '/message',
 			name: 'message',
-			component: () => import('@/views/MessageView.vue'),
+			component: () => import('@/views/message/View.vue'),
 			meta: {
 				layout: 'BottomNavLayout',
 				requiresAuth: true,

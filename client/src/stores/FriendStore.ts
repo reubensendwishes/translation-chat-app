@@ -1,19 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Friend, ReceivedRequest, SentRequest } from '@/types'
+import type { Friend, ReceivedRequest, SentRequest, UserData } from '@/types'
 export const useFriendStore = defineStore('friend', () => {
 	const friends = ref<Friend[]>([])
 	const receivedRequests = ref<ReceivedRequest[]>([])
 	const sentRequests = ref<SentRequest[]>([])
 
-	const addFriend = (request: ReceivedRequest) => {
-		const index = receivedRequests.value.findIndex(
-			(receivedRequest) => receivedRequest === request,
-		)
-		receivedRequests.value.splice(index, 1)
+	const addFriend = (requestId: string, friendData: UserData) => {
 		friends.value.unshift({
-			requestId: request.requestId,
-			friendData: request.requesterData,
+			requestId,
+			friendData,
 		})
 	}
 	const addSentRequest = (request: SentRequest) => {
@@ -23,13 +19,15 @@ export const useFriendStore = defineStore('friend', () => {
 		receivedRequests.value.unshift(request)
 	}
 
-	const removeSentRequest = (request: SentRequest) => {
-		const index = sentRequests.value.findIndex((sentRequest) => sentRequest === request)
+	const removeSentRequest = (requestId: string) => {
+		const index = sentRequests.value.findIndex(
+			(sentRequest) => sentRequest.requestId === requestId,
+		)
 		sentRequests.value.splice(index, 1)
 	}
-	const removeReceivedRequest = (request: ReceivedRequest) => {
+	const removeReceivedRequest = (requestId: string) => {
 		const index = receivedRequests.value.findIndex(
-			(receivedRequest) => receivedRequest === request,
+			(receivedRequest) => receivedRequest.requestId === requestId,
 		)
 		receivedRequests.value.splice(index, 1)
 	}

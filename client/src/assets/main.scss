@@ -45,6 +45,15 @@ body {
 	font-family: 'Huninn', sans-serif;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+}
+
 p {
 	margin: 0;
 }
@@ -72,7 +81,9 @@ button {
 textarea {
 	resize: none;
 }
-
+input {
+	margin: 0;
+}
 .btn {
 	display: inline-flex;
 	align-items: center;

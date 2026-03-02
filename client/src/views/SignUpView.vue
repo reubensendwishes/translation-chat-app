@@ -19,10 +19,12 @@
 	import type { InputData } from '@/components/ui/FloatLabelInput.vue'
 	import { useRouter } from 'vue-router'
 	import { removePrefix, kebabToCamel } from '@/utils/helpers'
+	import { useAuth } from '@/composables/useAuth'
 
 	type Validator = Record<string, (value: string) => string | Promise<string>>
 
 	const router = useRouter()
+	const { signUp } = useAuth()
 
 	const authCta: AuthCta = {
 		content: '已經有帳號嗎？',
@@ -113,13 +115,16 @@
 				})
 				return
 			}
-			const res = await axios.post('/api/auth/signup', {
-				email: formData['sign-up-email'],
-				password: formData['sign-up-password'],
-				fullName: formData['sign-up-full-name'],
-				username: formData['sign-up-username'],
-			})
-			router.push(`/profile/${res.data.user.username}`)
+			const result = await signUp(
+				formData['sign-up-email'],
+				formData['sign-up-password'],
+				formData['sign-up-full-name'],
+				formData['sign-up-username'],
+			)
+
+			if (result.success) {
+				router.push(`/profile/${formData['sign-up-username']}`)
+			}
 		} catch (error) {
 			if (axios.isAxiosError(error) && error.response) {
 				formError.value = error.response.data.message || '註冊失敗'

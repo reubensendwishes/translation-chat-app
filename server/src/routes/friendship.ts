@@ -30,22 +30,23 @@ router.post('/request', verifyToken, async (req: Request, res: Response) => {
 		if (existing) {
 			return res.status(409).json({ message: '已發送過好友請求' })
 		}
-		const friendRequest = new Friendship({
+		const friendship = new Friendship({
 			requester: requesterId,
 			recipient: recipientId,
 			status: 'pending',
 		})
-		await friendRequest.save()
+		await friendship.save()
 
-		const { _id: requestId } = friendRequest
+		const populated = await friendship.populate('requester', 'username fullName avatar')
 
 		const io = req.app.get('io')
 		io.to(recipientId).emit('friend-request', {
-			requestId: friendRequest._id,
-			from: requesterId,
+			requestId: populated._id,
+			requesterData: populated.requester,
+			createdAt: populated.createdAt,
 		})
 
-		res.status(201).json({ message: '好友請求已發送', requestId })
+		res.status(201).json({ message: '好友請求已發送', requestId: populated._id })
 	} catch {
 		res.status(500).json({ message: '無法發送好友請求' })
 	}
@@ -69,6 +70,14 @@ router.put('/request/:requestId', verifyToken, async (req: Request, res: Respons
 
 		await friendship.save()
 
+		const populated = await friendship.populate('recipient', 'username fullName avatar')
+
+		const io = req.app.get('io')
+		io.to(populated.requester._id.toString()).emit('friend-request-accepted', {
+			requestId: populated._id,
+			friendData: populated.recipient,
+		})
+
 		res.json({ message: '成功接受好友邀請' })
 	} catch {
 		res.status(500).json({ message: '無法同意好友邀請' })
@@ -89,6 +98,12 @@ router.delete('/request/:requestId', verifyToken, async (req: Request, res: Resp
 		}
 
 		await friendship.deleteOne()
+
+		const io = req.app.get('io')
+		io.to(friendship.requester.toString()).emit('friend-request-rejected', {
+			requestId,
+			recipientId: req.userId,
+		})
 
 		res.json({ message: '成功拒絕好友邀請' })
 	} catch {

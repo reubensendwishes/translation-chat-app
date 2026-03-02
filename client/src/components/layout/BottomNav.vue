@@ -4,9 +4,14 @@
 			<RouterLink to="/"><LogoText /></RouterLink>
 		</div>
 		<div class="nav-right">
-			<button class="btn text-primary" @click="$emit('toggleOffcanvas')" type="button">
-				<GSymbol style="font-size: 30px">notifications</GSymbol>
-			</button>
+			<OffCanvas :teleport-to="'#app'">
+				<template #button>
+					<GSymbol style="font-size: 30px">notifications</GSymbol>
+				</template>
+				<template #header>通知</template>
+				<NotificationList />
+			</OffCanvas>
+
 			<RouterLink to="/message"><GSymbol style="font-size: 30px">chat</GSymbol></RouterLink>
 			<RouterLink :to="`/profile/${user?.username}`"
 				><GSymbol style="font-size: 30px">account_circle</GSymbol></RouterLink
@@ -20,12 +25,8 @@
 	import GSymbol from '@/components/icons/GSymbol.vue'
 	import { useAuthStore } from '@/stores/AuthStore'
 	import { storeToRefs } from 'pinia'
-
-	type Emit = {
-		toggleOffcanvas: []
-	}
-
-	defineEmits<Emit>()
+	import OffCanvas from '../ui/OffCanvas.vue'
+	import NotificationList from '@/components/notification/List.vue'
 
 	const authStore = useAuthStore()
 	const { user } = storeToRefs(authStore)
@@ -44,8 +45,8 @@
 		padding: 0 10px;
 		font-size: 30px;
 	}
-	.nav-right a:not(:last-child),
-	.nav-right button:not(:last-child) {
+	.nav-right > a:not(:last-child),
+	.nav-right > :deep(button:not(:last-child)) {
 		margin-right: 10px;
 	}
 </style>

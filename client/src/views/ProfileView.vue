@@ -226,6 +226,7 @@
 	}
 
 	const isFriend = computed(() => {
+		console.log(friends.value)
 		if (!userData.value) {
 			return false
 		}

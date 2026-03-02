@@ -2,6 +2,7 @@ import { Server as SocketIOServer } from 'socket.io'
 import type { Socket } from 'socket.io'
 import type { Server } from 'http'
 import jwt from 'jsonwebtoken'
+import { Types } from 'mongoose'
 import { config } from './config'
 import Message from './models/Message'
 import Conversation from './models/Conversation'
@@ -15,6 +16,31 @@ interface AuthenticatedSocket extends Socket {
 	userId?: string
 	email?: string
 }
+
+type SendMessageResponse =
+	| { success: false; message: string }
+	| { success: true; message: { _id: Types.ObjectId; text: string; createdAt: Date } }
+
+type PopulatedMessage = {
+	_id: Types.ObjectId
+	conversationId: Types.ObjectId
+	senderId: {
+		_id: Types.ObjectId
+		username: string
+		avatar: string
+	}
+	text: string
+	createdAt: Date
+}
+
+type GetMessagesResponse =
+	| { success: false; message: string }
+	| {
+			success: true
+			messages: PopulatedMessage[]
+			pagination: { total: number; page: number; limit: number; pages: number }
+	  }
+
 export const initializeSocket = (server: Server) => {
 	const io = new SocketIOServer(server, {
 		cors: {
@@ -42,6 +68,10 @@ export const initializeSocket = (server: Server) => {
 	io.on('connection', (socket: AuthenticatedSocket) => {
 		console.log(`User ${socket.userId} connected`)
 
+		if (socket.userId) {
+			socket.join(socket.userId)
+		}
+
 		socket.on('join-conversation', async (conversationId: string) => {
 			try {
 				const conversation = await Conversation.findById(conversationId)
@@ -55,6 +85,9 @@ export const initializeSocket = (server: Server) => {
 					socket.emit('error', { message: 'Unauthorized' })
 					return
 				}
+
+				socket.join(conversationId)
+				console.log(`User ${socket.userId} joined conversation ${conversationId} `)
 			} catch (error) {
 				console.error('加入對話失敗', error)
 				socket.emit('error', { message: 'Failed to join conversation' })
@@ -72,7 +105,7 @@ export const initializeSocket = (server: Server) => {
 			'send-message',
 			async (
 				data: { conversationId: string; text: string },
-				callback: (response: any) => void,
+				callback: (response: SendMessageResponse) => void,
 			) => {
 				try {
 					const { conversationId, text } = data
@@ -128,7 +161,7 @@ export const initializeSocket = (server: Server) => {
 			'get-messages',
 			async (
 				data: { conversationId: string; page?: number; limit?: number },
-				callback: (response: any) => void,
+				callback: (response: GetMessagesResponse) => void,
 			) => {
 				try {
 					const { conversationId, page = 1, limit = 50 } = data
@@ -146,13 +179,13 @@ export const initializeSocket = (server: Server) => {
 					}
 
 					// 取得訊息
-					const messages = await Message.find({
+					const messages = (await Message.find({
 						conversationId,
 					})
 						.populate('senderId', 'username avatar')
 						.sort({ createdAt: -1 })
 						.skip(skip)
-						.limit(limit)
+						.limit(limit)) as unknown as PopulatedMessage[]
 
 					const total = await Message.countDocuments({ conversationId })
 

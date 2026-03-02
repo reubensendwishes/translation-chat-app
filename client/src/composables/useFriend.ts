@@ -4,7 +4,7 @@ import type { ReceivedRequest } from '@/types'
 
 export const useFriend = () => {
 	const friendStore = useFriendStore()
-	const { setFriendshipData, addFriend, addSentRequest } = friendStore
+	const { setFriendshipData, addFriend, addSentRequest, removeReceivedRequest } = friendStore
 
 	const errorHandler = (error: unknown) => {
 		if (axios.isAxiosError(error) && error.response) {
@@ -24,9 +24,10 @@ export const useFriend = () => {
 	}
 	const acceptFriendRequest = async (request: ReceivedRequest) => {
 		try {
-			const { requestId } = request
+			const { requestId, requesterData } = request
 			const res = await axios.put(`/api/friendship/request/${requestId}`)
-			addFriend(request)
+			removeReceivedRequest(requestId)
+			addFriend(requestId, requesterData)
 
 			return { success: true, message: res.data.message }
 		} catch (error) {
@@ -35,12 +36,9 @@ export const useFriend = () => {
 	}
 	const sendFriendRequest = async (recipientId: string) => {
 		try {
-			console.log(recipientId)
 			const res = await axios.post('/api/friendship/request', { recipientId })
 			const { requestId } = res.data
-
 			addSentRequest({ requestId, recipientId })
-
 			return { success: true, message: res.data.message }
 		} catch (error) {
 			return errorHandler(error)
@@ -50,7 +48,7 @@ export const useFriend = () => {
 		const { requestId } = request
 		try {
 			const res = await axios.delete(`/api/friendship/request/${requestId}`)
-
+			removeReceivedRequest(requestId)
 			return { success: true, message: res.data.message }
 		} catch (error) {
 			return errorHandler(error)

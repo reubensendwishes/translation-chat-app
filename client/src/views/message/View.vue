@@ -1,6 +1,13 @@
 <template>
 	<main class="text-primary d-flex">
 		<ul class="contact-list bg-default d-inline-flex">
+			<AppModal v-model="isModalOpen">
+				<template #header>新訊息</template>
+				<template #button>
+					<GSymbol class="text-primary" style="font-size: 30px">edit_square</GSymbol>
+				</template>
+				<NewChatPanel @open-conversation="openConversation" />
+			</AppModal>
 			<li v-for="contact in contactList" :key="contact._id">
 				<img class="pill" :src="contact.avatar" :alt="contact.username" />
 			</li>
@@ -51,6 +58,8 @@
 	import ContactTest from '@/assets/contact-test.png'
 	import GSymbol from '@/components/icons/GSymbol.vue'
 	import axios from 'axios'
+	import AppModal from '@/components/ui/AppModal.vue'
+	import NewChatPanel from './NewChatPanel.vue'
 	const contactList = ref<Contact[]>([])
 	const currentContact = ref({
 		avatar: ContactTest,
@@ -99,6 +108,10 @@
 			clearInput()
 			chatInputRef.value?.focus()
 		}
+	}
+	const isModalOpen = ref(false)
+	const openConversation = (conversationTarget) => {
+		isModalOpen.value = false
 	}
 
 	onMounted(async () => {

@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/stores/AuthStore'
+import { connectSocket, disconnectSocket } from '@/socket'
 import axios from 'axios'
 
 export const useAuth = () => {
@@ -30,7 +31,7 @@ export const useAuth = () => {
 			const { accessToken, user } = res.data
 			setAuth(accessToken, user)
 			setAxiosToken(accessToken)
-
+			connectSocket(accessToken)
 			return { success: true }
 		} catch (error) {
 			if (axios.isAxiosError(error) && error.response) {
@@ -46,10 +47,10 @@ export const useAuth = () => {
 	): Promise<{ success: boolean; message?: string }> => {
 		try {
 			const res = await axios.post('/api/auth/login', { identifier, password })
-
 			const { accessToken, user } = res.data
 			authStore.setAuth(accessToken, user)
 			setAxiosToken(accessToken)
+			connectSocket(accessToken)
 			return { success: true }
 		} catch (error) {
 			if (axios.isAxiosError(error) && error.response) {
@@ -62,6 +63,7 @@ export const useAuth = () => {
 	const logout = () => {
 		clearAuth()
 		clearAxiosToken()
+		disconnectSocket()
 	}
 
 	const refreshAccessToken = async (): Promise<boolean> => {
