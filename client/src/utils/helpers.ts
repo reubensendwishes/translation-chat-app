@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export function debounce<T extends (...args: unknown[]) => void>(
 	func: T,
 	delay = 200,
@@ -20,4 +22,11 @@ export function removePrefix(str: string, prefix: string) {
 
 export function kebabToCamel(str: string) {
 	return str.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
+}
+
+export function handleRequestError(error: unknown) {
+	if (axios.isAxiosError(error) && error.response) {
+		return { success: false, message: error.response.data.message }
+	}
+	return { success: false, message: '網絡錯誤' }
 }

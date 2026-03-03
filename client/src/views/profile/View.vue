@@ -8,9 +8,9 @@
 						<span class="user-username">
 							{{ profileUsername }}
 						</span>
-						<button type="button" class="option-btn btn text-primary">
+						<RouterLink to="/editProfile" class="option-btn">
 							<GSymbol style="font-size: 16px">settings</GSymbol>
-						</button>
+						</RouterLink>
 					</div>
 
 					<div class="user-stats d-flex">
@@ -100,10 +100,6 @@
 		avatar?: string
 		isOwner: boolean
 		friendCount: number
-	}
-	type Stat = {
-		name: string
-		count: number
 	}
 	type Post = {
 		_id: string
@@ -208,7 +204,7 @@
 		}
 		window.scrollTo(0, 0)
 	}
-	const profileStats = ref<Stat[]>([
+	const profileStats = computed(() => [
 		{ name: 'post', count: totalPosts.value },
 		{ name: 'friend', count: userData.value?.friendCount ?? 0 },
 	])
@@ -217,16 +213,12 @@
 
 	const handleSendFriendRequest = async () => {
 		if (!userData.value) return
-		console.log(userData.value)
-
 		const result = await sendFriendRequest(userData.value.userId)
 		if (result?.success) {
-			console.log(result.message)
 		}
 	}
 
 	const isFriend = computed(() => {
-		console.log(friends.value)
 		if (!userData.value) {
 			return false
 		}
@@ -251,7 +243,6 @@
 		}
 		await fetchPosts('all', 1)
 		await nextTick()
-
 		setupIntersectionObserver()
 	})
 	onBeforeUnmount(() => {

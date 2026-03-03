@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 	import LogoText from '@/components/icons/LogoText.vue'
-	import GSymbol from '@/components/icons/GSymbol.vue'
+	import GSymbol from '../icons/GSymbol.vue'
 	import { useAuthStore } from '@/stores/AuthStore'
 	import { storeToRefs } from 'pinia'
 	import OffCanvas from '../ui/OffCanvas.vue'

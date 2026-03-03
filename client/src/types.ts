@@ -20,13 +20,6 @@ export type Image = {
 	src: string
 }
 
-export type Contact = {
-	_id: string
-	username: string
-	avatar: string
-	fullName: string
-}
-
 export type BaseField = {
 	label: string
 	value: string
@@ -45,17 +38,16 @@ export type UserData = {
 	fullName: string
 	avatar: string
 }
-export type Friend = {
-	requestId: string
-	friendData: UserData
-}
-export type ReceivedRequest = {
-	requestId: string
-	requesterData: UserData
-	createdAt: Date
-}
 
-export type SentRequest = {
-	requestId: string
-	recipientId: string
+export type FriendShip = {
+	_id: string
+	friendData: UserData
+	myRole: 'requester' | 'recipient'
+	status: 'accepted' | 'pending'
+	updatedAt: Date
+}
+export type Conversation = {
+	conversationId: string
+	recipientData: UserData
+	createdAt: Date
 }

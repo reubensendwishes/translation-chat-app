@@ -1,55 +1,70 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import type { Friend, ReceivedRequest, SentRequest, UserData } from '@/types'
+import { computed, ref } from 'vue'
+import type { FriendShip } from '@/types'
 export const useFriendStore = defineStore('friend', () => {
-	const friends = ref<Friend[]>([])
-	const receivedRequests = ref<ReceivedRequest[]>([])
-	const sentRequests = ref<SentRequest[]>([])
+	const friendships = ref<FriendShip[]>([])
 
-	const addFriend = (requestId: string, friendData: UserData) => {
-		friends.value.unshift({
-			requestId,
-			friendData,
-		})
-	}
-	const addSentRequest = (request: SentRequest) => {
-		sentRequests.value.unshift(request)
-	}
-	const addReceivedRequest = (request: ReceivedRequest) => {
-		receivedRequests.value.unshift(request)
-	}
+	const friends = computed(() => {
+		return friendships.value
+			.filter((friendship) => friendship.status === 'accepted')
+			.map((friendship) => {
+				return { requestId: friendship._id, friendData: friendship.friendData }
+			})
+	})
+	const receivedRequests = computed(() => {
+		return friendships.value
+			.filter(
+				(friendship) =>
+					friendship.status === 'pending' && friendship.myRole === 'recipient',
+			)
+			.map((friendship) => {
+				return {
+					requestId: friendship._id,
+					requesterData: friendship.friendData,
+					updatedAt: friendship.updatedAt,
+				}
+			})
+	})
+	const sentRequests = computed(() => {
+		return friendships.value
+			.filter(
+				(friendship) =>
+					friendship.status === 'pending' && friendship.myRole === 'requester',
+			)
+			.map((friendship) => {
+				return {
+					requestId: friendship._id,
+					recipientId: friendship.friendData._id,
+				}
+			})
+	})
+	// const friendMap = computed(
+	// 	() => new Map(friends.value.map((friend) => [friend.friendData._id, friend.friendData])),
+	// )
 
-	const removeSentRequest = (requestId: string) => {
-		const index = sentRequests.value.findIndex(
-			(sentRequest) => sentRequest.requestId === requestId,
-		)
-		sentRequests.value.splice(index, 1)
+	const addFriendship = (friendship: FriendShip) => {
+		friendships.value.unshift(friendship)
 	}
-	const removeReceivedRequest = (requestId: string) => {
-		const index = receivedRequests.value.findIndex(
-			(receivedRequest) => receivedRequest.requestId === requestId,
-		)
-		receivedRequests.value.splice(index, 1)
+	const removeFriendship = (requestId: string) => {
+		const index = friendships.value.findIndex((friendship) => friendship._id === requestId)
+		if (index !== -1) friendships.value.splice(index, 1)
 	}
-
-	const setFriendshipData = (
-		newFriends: Friend[],
-		newReceivedRequests: ReceivedRequest[],
-		newSentRequests: SentRequest[],
-	) => {
-		friends.value = newFriends
-		receivedRequests.value = newReceivedRequests
-		sentRequests.value = newSentRequests
+	const updateStatusToAccepted = (requestId: string) => {
+		const friendship = friendships.value.find((friendship) => friendship._id === requestId)
+		if (friendship) {
+			friendship.status = 'accepted'
+		}
+	}
+	const setFriendshipData = (newFriendships: FriendShip[]) => {
+		friendships.value = newFriendships
 	}
 	return {
 		friends,
 		receivedRequests,
 		sentRequests,
-		addFriend,
-		addSentRequest,
-		addReceivedRequest,
+		updateStatusToAccepted,
+		addFriendship,
 		setFriendshipData,
-		removeSentRequest,
-		removeReceivedRequest,
+		removeFriendship,
 	}
 })

@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-	import GSymbol from '@/components/icons/GSymbol.vue'
+	import GSymbol from '../../components/icons/GSymbol.vue'
 	import SpinnerIcon from '@/components/icons/SpinnerIcon.vue'
 	import axios from 'axios'
 	import { ref, computed, onMounted } from 'vue'

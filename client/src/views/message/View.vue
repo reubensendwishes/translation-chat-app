@@ -1,17 +1,7 @@
 <template>
 	<main class="text-primary d-flex">
-		<ul class="contact-list bg-default d-inline-flex">
-			<AppModal v-model="isModalOpen">
-				<template #header>新訊息</template>
-				<template #button>
-					<GSymbol class="text-primary" style="font-size: 30px">edit_square</GSymbol>
-				</template>
-				<NewChatPanel @open-conversation="openConversation" />
-			</AppModal>
-			<li v-for="contact in contactList" :key="contact._id">
-				<img class="pill" :src="contact.avatar" :alt="contact.username" />
-			</li>
-		</ul>
+		<ConversationList />
+
 		<div class="chat-box d-flex">
 			<div class="chat-header d-flex bg-default">
 				<div class="chat-header-left d-flex">
@@ -53,14 +43,11 @@
 </template>
 
 <script setup lang="ts">
-	import { onMounted, ref, useTemplateRef } from 'vue'
-	import type { Contact } from '@/types'
+	import { ref, useTemplateRef } from 'vue'
 	import ContactTest from '@/assets/contact-test.png'
 	import GSymbol from '@/components/icons/GSymbol.vue'
-	import axios from 'axios'
-	import AppModal from '@/components/ui/AppModal.vue'
-	import NewChatPanel from './NewChatPanel.vue'
-	const contactList = ref<Contact[]>([])
+	import ConversationList from '@/views/message/ConversationList.vue'
+
 	const currentContact = ref({
 		avatar: ContactTest,
 		username: 'reuben',
@@ -109,19 +96,6 @@
 			chatInputRef.value?.focus()
 		}
 	}
-	const isModalOpen = ref(false)
-	const openConversation = (conversationTarget) => {
-		isModalOpen.value = false
-	}
-
-	onMounted(async () => {
-		try {
-			const res = await axios.get('/api/friendship')
-			contactList.value = res.data
-		} catch (error) {
-			console.error(error)
-		}
-	})
 </script>
 
 <style scoped>
@@ -129,19 +103,7 @@
 		padding-bottom: 60px;
 		height: calc(100vh);
 	}
-	.contact-list {
-		flex-direction: column;
-		align-items: center;
-		width: 90px;
-		border-right: 1px var(--color-text-muted) solid;
-		padding: 16px 0;
-		gap: 16px;
-		vertical-align: top;
-	}
-	.contact-list img {
-		width: 44px;
-		height: 44px;
-	}
+
 	.chat-box {
 		flex: 1;
 		flex-direction: column;

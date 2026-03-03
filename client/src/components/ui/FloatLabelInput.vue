@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 	import { computed } from 'vue'
-	import GSymbol from '@/components/icons/GSymbol.vue'
+	import GSymbol from '../icons/GSymbol.vue'
 
 	export type InputData = {
 		type: 'text' | 'email' | 'password'

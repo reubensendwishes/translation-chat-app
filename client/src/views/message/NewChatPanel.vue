@@ -23,15 +23,14 @@
 					/>
 				</label>
 			</li>
-			{{
-				selectedFriend
-			}}
 		</ul>
 
 		<button
-			@click="openConversation"
+			@click="selectedFriend && openConversation()"
+			:disabled="!selectedFriend"
 			type="button"
-			class="btn select-btn text-inverse bg-inverse"
+			:class="selectedFriend ? 'bg-inverse' : 'bg-muted'"
+			class="btn select-btn text-inverse"
 		>
 			聊天
 		</button>
@@ -41,10 +40,10 @@
 <script setup lang="ts">
 	import { useFriendStore } from '@/stores/FriendStore'
 	import { storeToRefs } from 'pinia'
-	import { ref } from 'vue'
+	import { onMounted, ref } from 'vue'
 
 	type Emits = {
-		openConversation: [conversationTarget: string | null]
+		openConversation: [conversationTarget: string]
 	}
 	const emit = defineEmits<Emits>()
 	const friendStore = useFriendStore()
@@ -52,8 +51,12 @@
 
 	const selectedFriend = ref(null)
 	const openConversation = () => {
-		emit('openConversation', selectedFriend.value)
+		if (!selectedFriend.value) return
+		emit('openConversation', selectedFriend.value!)
 	}
+	onMounted(() => {
+		console.log(selectedFriend.value)
+	})
 </script>
 
 <style scoped>

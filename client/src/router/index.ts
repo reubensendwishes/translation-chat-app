@@ -44,7 +44,7 @@ const router = createRouter({
 		{
 			path: '/profile/:username',
 			name: 'profile',
-			component: () => import('@/views/ProfileView.vue'),
+			component: () => import('@/views/profile/View.vue'),
 			meta: {
 				layout: 'BottomNavLayout',
 				requiresAuth: true,

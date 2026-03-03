@@ -9,6 +9,9 @@ export const connectSocket = (token: string) => {
 		auth: { token },
 	})
 
+	const friendStore = useFriendStore()
+	const { addFriendship, updateStatusToAccepted, removeFriendship } = friendStore
+
 	socket.on('connect', () => {
 		console.log('Socket connected')
 	})
@@ -16,24 +19,16 @@ export const connectSocket = (token: string) => {
 	socket.on('connect_error', (err) => {
 		console.log('Socket connection error:', err.message)
 	})
-	socket.on('friend-request', (receivedRequest) => {
-		const friendStore = useFriendStore()
-		const { addReceivedRequest } = friendStore
-		addReceivedRequest(receivedRequest)
+	socket.on('friend-request', (friendship) => {
+		addFriendship(friendship)
 	})
 
-	socket.on('friend-request-accepted', (friendship) => {
-		const friendStore = useFriendStore()
-		const { addFriend, removeSentRequest } = friendStore
-		const { requestId, friendData } = friendship
-		addFriend(requestId, friendData)
-		removeSentRequest(friendship.requestId)
+	socket.on('friend-request-accepted', (requestId) => {
+		updateStatusToAccepted(requestId)
 	})
 
-	socket.on('friend-request-rejected', (friendship) => {
-		const friendStore = useFriendStore()
-		const { removeSentRequest } = friendStore
-		removeSentRequest(friendship.requestId)
+	socket.on('friend-request-rejected', (requestId) => {
+		removeFriendship(requestId)
 	})
 	return socket
 }

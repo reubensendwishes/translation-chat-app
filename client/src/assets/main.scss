@@ -90,6 +90,9 @@ input {
 	justify-content: center;
 	cursor: pointer;
 }
+.btn:disabled {
+	cursor: default;
+}
 .pill {
 	border-radius: 50rem;
 }

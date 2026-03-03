@@ -30,23 +30,34 @@ router.post('/request', verifyToken, async (req: Request, res: Response) => {
 		if (existing) {
 			return res.status(409).json({ message: '已發送過好友請求' })
 		}
-		const friendship = new Friendship({
+		const rawFriendship = new Friendship({
 			requester: requesterId,
 			recipient: recipientId,
 			status: 'pending',
 		})
-		await friendship.save()
+		await rawFriendship.save()
 
-		const populated = await friendship.populate('requester', 'username fullName avatar')
+		await rawFriendship.populate([
+			{ path: 'requester', select: 'username fullName avatar' },
+			{ path: 'recipient', select: 'username fullName avatar' },
+		])
 
+		const friendship = {
+			_id: rawFriendship._id,
+			friendData: rawFriendship.recipient,
+			myRole: 'requester',
+			status: rawFriendship.status,
+			updatedAt: rawFriendship.updatedAt,
+		}
 		const io = req.app.get('io')
 		io.to(recipientId).emit('friend-request', {
-			requestId: populated._id,
-			requesterData: populated.requester,
-			createdAt: populated.createdAt,
+			_id: rawFriendship._id,
+			friendData: rawFriendship.requester,
+			myRole: 'recipient',
+			status: rawFriendship.status,
+			updatedAt: rawFriendship.updatedAt,
 		})
-
-		res.status(201).json({ message: '好友請求已發送', requestId: populated._id })
+		res.status(201).json({ message: '好友請求已發送', friendship })
 	} catch {
 		res.status(500).json({ message: '無法發送好友請求' })
 	}
@@ -70,13 +81,8 @@ router.put('/request/:requestId', verifyToken, async (req: Request, res: Respons
 
 		await friendship.save()
 
-		const populated = await friendship.populate('recipient', 'username fullName avatar')
-
 		const io = req.app.get('io')
-		io.to(populated.requester._id.toString()).emit('friend-request-accepted', {
-			requestId: populated._id,
-			friendData: populated.recipient,
-		})
+		io.to(friendship.requester.toString()).emit('friend-request-accepted', friendship._id)
 
 		res.json({ message: '成功接受好友邀請' })
 	} catch {
@@ -100,10 +106,7 @@ router.delete('/request/:requestId', verifyToken, async (req: Request, res: Resp
 		await friendship.deleteOne()
 
 		const io = req.app.get('io')
-		io.to(friendship.requester.toString()).emit('friend-request-rejected', {
-			requestId,
-			recipientId: req.userId,
-		})
+		io.to(friendship.requester.toString()).emit('friend-request-rejected', requestId)
 
 		res.json({ message: '成功拒絕好友邀請' })
 	} catch {
@@ -114,51 +117,24 @@ router.delete('/request/:requestId', verifyToken, async (req: Request, res: Resp
 router.get('/', verifyToken, async (req: Request, res: Response) => {
 	try {
 		const userId = req.userId
-		const friendships = await Friendship.find({
+		const rawFriendships = await Friendship.find({
 			$or: [{ requester: userId }, { recipient: userId }],
 		}).populate([
 			{ path: 'requester', select: 'username fullName avatar' },
 			{ path: 'recipient', select: 'username fullName avatar' },
 		])
 
-		const friends = friendships
-			.filter((friendship) => {
-				return friendship.status === 'accepted'
-			})
-			.map((friendship) => {
-				const friendData =
-					friendship.requester._id.toString() === userId
-						? friendship.recipient
-						: friendship.requester
-				return { requestId: friendship._id, friendData }
-			})
-
-		const receivedRequests = friendships
-			.filter((friendship) => {
-				return (
-					friendship.status === 'pending' &&
-					friendship.recipient._id.toString() === userId
-				)
-			})
-			.map((friendship) => ({
-				requestId: friendship._id,
-				requesterData: friendship.requester,
-				createdAt: friendship.createdAt,
-			}))
-
-		const sentRequests = friendships
-			.filter((friendship) => {
-				return (
-					friendship.status === 'pending' &&
-					friendship.requester._id.toString() === userId
-				)
-			})
-			.map((friendship) => ({
-				requestId: friendship._id,
-				recipientId: friendship.recipient._id,
-			}))
-
-		res.json({ friends, receivedRequests, sentRequests })
+		const friendships = rawFriendships.map((rawFriendship) => {
+			const isRequester = rawFriendship.requester._id.toString() === userId
+			return {
+				_id: rawFriendship._id,
+				friendData: isRequester ? rawFriendship.recipient : rawFriendship.requester,
+				myRole: isRequester ? 'requester' : 'recipient',
+				status: rawFriendship.status,
+				updatedAt: rawFriendship.updatedAt,
+			}
+		})
+		res.json({ friendships, message: '成功取得好友關係' })
 	} catch {
 		res.status(500).json({ message: '無法取得好友資料' })
 	}

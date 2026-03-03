@@ -11,6 +11,7 @@ import { config } from './config'
 import authRouter from './routes/auth'
 import userRouter from './routes/user'
 import postRouter from './routes/post'
+import conversationRouter from './routes/conversation'
 import friendshipRouter from './routes/friendship'
 import { initializeSocket } from './socket'
 
@@ -30,6 +31,7 @@ app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
 app.use('/api/posts', postRouter)
 app.use('/api/friendship', friendshipRouter)
+app.use('/api/conversation', conversationRouter)
 
 // MongoDB connection
 mongoose

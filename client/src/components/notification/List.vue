@@ -12,14 +12,14 @@
 					{{ request.requesterData.username + '向你發出好友邀請' }}
 				</div>
 				<button
-					@click="acceptFriendRequest(request)"
+					@click="acceptFriendRequest(request.requestId)"
 					type="button"
 					class="friendship-btn text-secondary btn"
 				>
 					接受
 				</button>
 				<button
-					@click="refuseFriendRequest(request)"
+					@click="refuseFriendRequest(request.requestId)"
 					type="button"
 					class="friendship-btn text-secondary btn"
 				>

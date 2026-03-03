@@ -1,57 +1,50 @@
 import { useFriendStore } from '@/stores/FriendStore'
 import axios from 'axios'
-import type { ReceivedRequest } from '@/types'
+import { handleRequestError } from '@/utils/helpers'
 
 export const useFriend = () => {
 	const friendStore = useFriendStore()
-	const { setFriendshipData, addFriend, addSentRequest, removeReceivedRequest } = friendStore
+	const { setFriendshipData, updateStatusToAccepted, addFriendship, removeFriendship } =
+		friendStore
 
-	const errorHandler = (error: unknown) => {
-		if (axios.isAxiosError(error) && error.response) {
-			return { success: false, message: error.response.data.message }
-		}
-		return { success: false, message: '網絡錯誤' }
-	}
 	const fetchFriendshipData = async () => {
 		try {
 			const res = await axios.get('/api/friendship')
-			setFriendshipData(res.data.friends, res.data.receivedRequests, res.data.sentRequests)
-
-			return { success: true }
+			const { friendships, message } = res.data
+			setFriendshipData(friendships)
+			return { success: true, message }
 		} catch (error) {
-			return errorHandler(error)
+			return handleRequestError(error)
 		}
 	}
-	const acceptFriendRequest = async (request: ReceivedRequest) => {
+	const acceptFriendRequest = async (requestId: string) => {
 		try {
-			const { requestId, requesterData } = request
 			const res = await axios.put(`/api/friendship/request/${requestId}`)
-			removeReceivedRequest(requestId)
-			addFriend(requestId, requesterData)
-
-			return { success: true, message: res.data.message }
+			updateStatusToAccepted(requestId)
+			const { message } = res.data
+			return { success: true, message }
 		} catch (error) {
-			return errorHandler(error)
+			return handleRequestError(error)
 		}
 	}
 	const sendFriendRequest = async (recipientId: string) => {
 		try {
 			const res = await axios.post('/api/friendship/request', { recipientId })
-			const { requestId } = res.data
-			addSentRequest({ requestId, recipientId })
-			return { success: true, message: res.data.message }
+			const { friendship, message } = res.data
+			addFriendship(friendship)
+			return { success: true, message }
 		} catch (error) {
-			return errorHandler(error)
+			return handleRequestError(error)
 		}
 	}
-	const refuseFriendRequest = async (request: ReceivedRequest) => {
-		const { requestId } = request
+	const refuseFriendRequest = async (requestId: string) => {
 		try {
 			const res = await axios.delete(`/api/friendship/request/${requestId}`)
-			removeReceivedRequest(requestId)
-			return { success: true, message: res.data.message }
+			removeFriendship(requestId)
+			const { message } = res.data
+			return { success: true, message }
 		} catch (error) {
-			return errorHandler(error)
+			return handleRequestError(error)
 		}
 	}
 

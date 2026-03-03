@@ -134,7 +134,6 @@
 	.auth-form button[type='submit']:disabled,
 	.auth-form button[type='submit']:disabled:hover {
 		background-color: var(--color-text-muted);
-		cursor: default;
 	}
 	.auth-form button[type='submit']:hover {
 		background-color: var(--color-primary-darken);
