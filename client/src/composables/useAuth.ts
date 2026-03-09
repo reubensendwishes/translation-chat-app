@@ -19,7 +19,7 @@ export const useAuth = () => {
 		password: string,
 		fullName: string,
 		username: string,
-	): Promise<{ success: boolean; message?: string }> => {
+	): Promise<{ success: boolean; detail?: string }> => {
 		try {
 			const res = await axios.post('/api/auth/signup', {
 				email,
@@ -35,16 +35,16 @@ export const useAuth = () => {
 			return { success: true }
 		} catch (error) {
 			if (axios.isAxiosError(error) && error.response) {
-				return { success: false, message: error.response.data.message }
+				return { success: false, detail: error.response.data.detail }
 			}
-			return { success: false, message: '網路錯誤' }
+			return { success: false, detail: 'Internal server error' }
 		}
 	}
 
 	const login = async (
 		identifier: string,
 		password: string,
-	): Promise<{ success: boolean; message?: string }> => {
+	): Promise<{ success: boolean; detail?: string }> => {
 		try {
 			const res = await axios.post('/api/auth/login', { identifier, password })
 			const { accessToken, user } = res.data
@@ -54,9 +54,9 @@ export const useAuth = () => {
 			return { success: true }
 		} catch (error) {
 			if (axios.isAxiosError(error) && error.response) {
-				return { success: false, message: error.response.data.message }
+				return { success: false, detail: error.response.data.detail }
 			}
-			return { success: false, message: '網路錯誤' }
+			return { success: false, detail: 'Internal server error' }
 		}
 	}
 

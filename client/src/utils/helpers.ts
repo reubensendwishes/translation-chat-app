@@ -26,7 +26,7 @@ export function kebabToCamel(str: string) {
 
 export function handleRequestError(error: unknown) {
 	if (axios.isAxiosError(error) && error.response) {
-		return { success: false, message: error.response.data.message }
+		return { success: false, detail: error.response.data.detail }
 	}
-	return { success: false, message: '網絡錯誤' }
+	return { success: false, detail: 'Internal server error' }
 }

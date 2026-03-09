@@ -6,6 +6,7 @@ import { Types } from 'mongoose'
 import { config } from './config'
 import Message from './models/Message'
 import Conversation from './models/Conversation'
+import Friendship from './models/Friendship'
 
 type TokenPayload = {
 	userId: string
@@ -18,28 +19,10 @@ interface AuthenticatedSocket extends Socket {
 }
 
 type SendMessageResponse =
-	| { success: false; message: string }
-	| { success: true; message: { _id: Types.ObjectId; text: string; createdAt: Date } }
+	| { success: false; detail: string }
+	| { success: true; message: { _id: Types.ObjectId; createdAt: Date } }
 
-type PopulatedMessage = {
-	_id: Types.ObjectId
-	conversationId: Types.ObjectId
-	senderId: {
-		_id: Types.ObjectId
-		username: string
-		avatar: string
-	}
-	text: string
-	createdAt: Date
-}
-
-type GetMessagesResponse =
-	| { success: false; message: string }
-	| {
-			success: true
-			messages: PopulatedMessage[]
-			pagination: { total: number; page: number; limit: number; pages: number }
-	  }
+export const onlineUsers = new Set<string>()
 
 export const initializeSocket = (server: Server) => {
 	const io = new SocketIOServer(server, {
@@ -65,42 +48,40 @@ export const initializeSocket = (server: Server) => {
 		}
 	})
 
-	io.on('connection', (socket: AuthenticatedSocket) => {
+	io.on('connection', async (socket: AuthenticatedSocket) => {
 		console.log(`User ${socket.userId} connected`)
 
 		if (socket.userId) {
 			socket.join(socket.userId)
+
+			const conversations = await Conversation.find({ members: socket.userId })
+			console.log(conversations)
+			conversations.forEach((conversation) => {
+				console.log(conversation)
+				socket.join(conversation._id.toString())
+			})
+			onlineUsers.add(socket.userId)
+
+			const friendships = await Friendship.find({
+				$or: [{ requester: socket.userId }, { recipient: socket.userId }],
+				status: 'accepted',
+			})
+			const friendIds = friendships.map((friendship) => {
+				if (friendship.requester.toString() === socket.userId) {
+					return friendship.recipient.toString()
+				}
+				return friendship.requester.toString()
+			})
+			for (const friendId of friendIds) {
+				io.to(friendId).emit('user-online', socket.userId)
+			}
 		}
 
-		socket.on('join-conversation', async (conversationId: string) => {
-			try {
-				const conversation = await Conversation.findById(conversationId)
-
-				if (
-					!conversation ||
-					!conversation.members.some(
-						(member) => member.userId.toString() === socket.userId,
-					)
-				) {
-					socket.emit('error', { message: 'Unauthorized' })
-					return
-				}
-
-				socket.join(conversationId)
-				console.log(`User ${socket.userId} joined conversation ${conversationId} `)
-			} catch (error) {
-				console.error('加入對話失敗', error)
-				socket.emit('error', { message: 'Failed to join conversation' })
-			}
+		socket.on('get-online-friends', async (friendIds: string[], callback) => {
+			const onlineFriends = friendIds.filter((friendId) => onlineUsers.has(friendId))
+			callback(onlineFriends)
 		})
-		socket.on('leave-conversation', (conversationId: string) => {
-			socket.leave(conversationId)
-			console.log(`User ${socket.userId} left conversation ${conversationId}`)
-			socket.to(conversationId).emit('user-left', {
-				userId: socket.userId,
-				timestamp: new Date(),
-			})
-		})
+
 		socket.on(
 			'send-message',
 			async (
@@ -113,11 +94,11 @@ export const initializeSocket = (server: Server) => {
 					const conversation = await Conversation.findById(conversationId)
 					if (
 						!conversation ||
-						!conversation.members.some((m) => m.userId.toString() === socket.userId)
+						!conversation.members.some((member) => member.toString() === socket.userId)
 					) {
 						callback({
 							success: false,
-							message: 'Unauthorized or conversation not found',
+							detail: 'Unauthorized or conversation not found',
 						})
 						return
 					}
@@ -130,96 +111,61 @@ export const initializeSocket = (server: Server) => {
 
 					await message.save()
 
-					const populatedMessage = await message.populate('senderId', 'username avatar')
-
 					io.to(conversationId).emit('message-received', {
-						_id: populatedMessage._id,
-						conversationId: populatedMessage.conversationId,
-						senderId: populatedMessage.senderId,
-						text: populatedMessage.text,
-						createdAt: populatedMessage.createdAt,
+						_id: message._id,
+						conversationId: message.conversationId,
+						senderId: message.senderId,
+						text: message.text,
+						createdAt: message.createdAt,
 					})
 
 					callback({
 						success: true,
 						message: {
-							_id: populatedMessage._id,
-							text: populatedMessage.text,
-							createdAt: populatedMessage.createdAt,
+							_id: message._id,
+							createdAt: message.createdAt,
 						},
 					})
 				} catch (error) {
 					console.error('發生訊息失敗', error)
 					callback({
 						success: false,
-						message: 'Failed to send message',
+						detail: 'Failed to send message',
 					})
 				}
 			},
 		)
-		socket.on(
-			'get-messages',
-			async (
-				data: { conversationId: string; page?: number; limit?: number },
-				callback: (response: GetMessagesResponse) => void,
-			) => {
-				try {
-					const { conversationId, page = 1, limit = 50 } = data
-					const skip = (page - 1) * limit
 
-					// 驗證對話存在且使用者屬於該對話
-					const conversation = await Conversation.findById(conversationId)
+		// 打字中的狀態 尚未新增該功能
+		// socket.on('user-typing', (data: { conversationId: string; username: string }) => {
+		// 	socket
+		// 		.to(data.conversationId)
+		// 		.emit('user-typing', { userId: socket.userId, username: data.username })
+		// })
+		// 停止打字 尚未新增該功能
+		// socket.on('user-stop-typing', (conversationId: string) => {
+		// 	socket.to(conversationId).emit('user-stop-typing', { userId: socket.userId })
+		// })
 
-					if (
-						!conversation ||
-						!conversation.members.some((m) => m.userId.toString() === socket.userId)
-					) {
-						callback({ success: false, message: 'Unauthorized' })
-						return
-					}
-
-					// 取得訊息
-					const messages = (await Message.find({
-						conversationId,
-					})
-						.populate('senderId', 'username avatar')
-						.sort({ createdAt: -1 })
-						.skip(skip)
-						.limit(limit)) as unknown as PopulatedMessage[]
-
-					const total = await Message.countDocuments({ conversationId })
-
-					callback({
-						success: true,
-						messages: messages.reverse(),
-						pagination: {
-							total,
-							page,
-							limit,
-							pages: Math.ceil(total / limit),
-						},
-					})
-				} catch (error) {
-					console.error('取得訊息失敗', error)
-					callback({
-						success: false,
-						message: 'Failed to fetch messages',
-					})
-				}
-			},
-		)
-		// 打字中的狀態
-		socket.on('user-typing', (data: { conversationId: string; username: string }) => {
-			socket
-				.to(data.conversationId)
-				.emit('user-typing', { userId: socket.userId, username: data.username })
-		})
-		// 停止打字
-		socket.on('user-stop-typing', (conversationId: string) => {
-			socket.to(conversationId).emit('user-stop-typing', { userId: socket.userId })
-		})
 		// 斷線事件
-		socket.on('disconnect', () => {
+		socket.on('disconnect', async () => {
+			const friendships = await Friendship.find({
+				$or: [{ requester: socket.userId }, { recipient: socket.userId }],
+				status: 'accepted',
+			})
+
+			const friendIds = friendships.map((friendship) => {
+				if (friendship.recipient.toString() === socket.userId) {
+					return friendship.requester.toString()
+				}
+				return friendship.recipient.toString()
+			})
+			for (const friendId of friendIds) {
+				io.to(friendId).emit('user-offline', socket.userId)
+			}
+			if (socket.userId) {
+				onlineUsers.delete(socket.userId)
+			}
 			console.log(`User ${socket.userId} disconnected`)
 		})
 	})

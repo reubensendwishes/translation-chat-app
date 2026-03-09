@@ -7,13 +7,13 @@ import Conversation from '../models/Conversation'
 const router = Router()
 
 router.get('/', verifyToken, async (req: Request, res: Response) => {
-	const conversations = await Conversation.find({ 'members.userId': req.userId })
+	const conversations = await Conversation.find({ members: req.userId })
 
 	const result = conversations.map((conversation) => {
 		return {
 			_id: conversation._id,
 			recipientId: conversation.members.find((member) => member.toString() !== req.userId),
-			createdAt: conversation.createdAt,
+			updatedAt: conversation.updatedAt,
 		}
 	})
 	res.json(result)
@@ -21,10 +21,10 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
 router.post('/', verifyToken, async (req: Request, res: Response) => {
 	try {
 		const { conversationTarget } = req.body
-		if (!conversationTarget) return res.status(400).json({ message: '缺少對話對象' })
+		if (!conversationTarget) return res.status(400).json({ detail: 'Validation error' })
 
 		if (conversationTarget === req.userId)
-			return res.status(400).json({ message: '不能與自己建立對話' })
+			return res.status(400).json({ detail: 'Validation error' })
 
 		const friendship = await Friendship.findOne({
 			$or: [
@@ -35,25 +35,35 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
 		})
 
 		if (!friendship) {
-			return res.status(403).json({ message: '只能與好友建立對話' })
+			return res.status(403).json({ detail: 'Permission denied' })
 		}
 
 		const existing = await Conversation.findOne({
-			$and: [{ 'member.userId': conversationTarget }, { 'member.userId': req.userId }],
+			members: { $all: [conversationTarget, req.userId] },
 		})
 
 		if (existing) {
-			return res.json(existing)
+			return res.json({ existing })
 		}
 
 		const conversation = new Conversation({
-			members: [{ userId: conversationTarget }, { userId: req.userId }],
+			members: [conversationTarget, req.userId],
 		})
 		await conversation.save()
 
-		res.status(201).json(conversation)
-	} catch {
-		res.status(500).json({ message: '無法建立對話' })
+		const io = req.app.get('io')
+
+		for (const member of conversation.members) {
+			const sockets = await io.in(member.toString()).fetchSockets()
+			for (const socket of sockets) {
+				socket.join(conversation._id.toString())
+			}
+		}
+
+		res.status(201).json({ conversation })
+	} catch (error) {
+		console.error(error)
+		res.status(500).json({ detail: 'Internal server error' })
 	}
 })
 

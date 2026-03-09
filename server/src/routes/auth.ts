@@ -48,8 +48,8 @@ router.post('/signup', async (req: Request, res: Response) => {
 		const { email, password, fullName, username } = req.body
 
 		if (!email || !password || !fullName || !username) {
-			console.error(email, password, fullName, username)
-			return res.status(400).json({ message: '所有欄位為必填' })
+			console.error(email, fullName, username)
+			return res.status(400).json({ detail: 'Validation error' })
 		}
 
 		const [existingEmail, existingUsername] = await Promise.all([
@@ -58,7 +58,7 @@ router.post('/signup', async (req: Request, res: Response) => {
 		])
 
 		if (existingEmail || existingUsername) {
-			return res.status(409).json({ message: '註冊失敗，請檢查輸入或稍後重試' })
+			return res.status(409).json({ detail: 'Email or username already exists' })
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10)
@@ -86,7 +86,6 @@ router.post('/signup', async (req: Request, res: Response) => {
 		})
 
 		return res.status(201).json({
-			message: '註冊成功',
 			accessToken,
 			user: {
 				id: newUser._id,
@@ -97,7 +96,7 @@ router.post('/signup', async (req: Request, res: Response) => {
 		})
 	} catch (error) {
 		console.error('註冊錯誤', error)
-		res.status(500).json({ message: '伺服器錯誤' })
+		res.status(500).json({ detail: 'Internal server error' })
 	}
 })
 
@@ -106,7 +105,7 @@ router.post('/login', async (req: Request, res: Response) => {
 		const { identifier, password } = req.body
 
 		if (!identifier || !password) {
-			return res.status(400).json({ message: '電子郵件/用戶名稱和密碼為必填' })
+			return res.status(400).json({ detail: 'Validation error' })
 		}
 
 		let query
@@ -118,16 +117,14 @@ router.post('/login', async (req: Request, res: Response) => {
 			query = { username: identifier }
 		} else {
 			return res.status(401).json({
-				errorCode: 'INVALID_CREDENTIALS',
-				message: '登入資訊錯誤',
+				detail: 'Invalid credentials',
 			})
 		}
 		const user = await User.findOne(query)
 
 		if (!user) {
 			return res.status(401).json({
-				errorCode: 'INVALID_CREDENTIALS',
-				message: '登入資訊錯誤',
+				detail: 'Invalid credentials',
 			})
 		}
 
@@ -135,8 +132,7 @@ router.post('/login', async (req: Request, res: Response) => {
 
 		if (!isPasswordValid) {
 			return res.status(401).json({
-				errorCode: 'INVALID_CREDENTIALS',
-				message: '登入資訊錯誤',
+				detail: 'Invalid credentials',
 			})
 		}
 
@@ -154,7 +150,6 @@ router.post('/login', async (req: Request, res: Response) => {
 		})
 
 		res.json({
-			message: '登入成功',
 			accessToken,
 			user: {
 				id: user._id,
@@ -165,7 +160,7 @@ router.post('/login', async (req: Request, res: Response) => {
 		})
 	} catch (error) {
 		console.error('登入錯誤', error)
-		res.status(500).json({ message: '伺服器錯誤' })
+		res.status(500).json({ detail: 'Internal server error' })
 	}
 })
 
@@ -175,8 +170,7 @@ router.post('/refresh', async (req: Request, res: Response) => {
 
 		if (!refreshToken) {
 			return res.status(401).json({
-				errorCode: 'REFRESH_TOKEN_INVALID',
-				message: 'refreshToken 不存在或已過期',
+				detail: 'Invalid token',
 			})
 		}
 
@@ -185,8 +179,7 @@ router.post('/refresh', async (req: Request, res: Response) => {
 		const user = await User.findById(decoded.userId)
 		if (!user || decoded.version !== user.tokenVersion) {
 			return res.status(401).json({
-				errorCode: 'REFRESH_TOKEN_INVALID',
-				message: '無效的 refreshToken',
+				detail: 'Invalid token',
 			})
 		}
 
@@ -211,8 +204,7 @@ router.post('/refresh', async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error('刷新token錯誤:', error)
 		res.status(401).json({
-			errorCode: 'REFRESH_TOKEN_INVALID',
-			message: '無效的 refreshToken',
+			detail: 'Invalid token',
 		})
 	}
 })

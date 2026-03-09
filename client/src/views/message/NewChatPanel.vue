@@ -13,12 +13,10 @@
 						<div class="friend-full-name">{{ friend.friendData.fullName }}</div>
 					</div>
 					<input
-						@click="
-							selectedFriend === friend.friendData.username && (selectedFriend = null)
-						"
+						@click="selectedFriend === friend.friendData._id && (selectedFriend = null)"
 						class="friend-radio pill"
 						v-model="selectedFriend"
-						:value="friend.friendData.username"
+						:value="friend.friendData._id"
 						type="radio"
 					/>
 				</label>
@@ -40,7 +38,7 @@
 <script setup lang="ts">
 	import { useFriendStore } from '@/stores/FriendStore'
 	import { storeToRefs } from 'pinia'
-	import { onMounted, ref } from 'vue'
+	import { ref } from 'vue'
 
 	type Emits = {
 		openConversation: [conversationTarget: string]
@@ -54,9 +52,6 @@
 		if (!selectedFriend.value) return
 		emit('openConversation', selectedFriend.value!)
 	}
-	onMounted(() => {
-		console.log(selectedFriend.value)
-	})
 </script>
 
 <style scoped>

@@ -12,12 +12,12 @@ router.post('/request', verifyToken, async (req: Request, res: Response) => {
 		const { recipientId } = req.body
 
 		if (requesterId === recipientId) {
-			return res.status(400).json({ message: '不能對自己發送好友請求' })
+			return res.status(400).json({ detail: 'Validation error' })
 		}
 
 		const recipient = await User.findById(recipientId)
 		if (!recipient) {
-			return res.status(404).json({ message: '找不到該使用者' })
+			return res.status(404).json({ detail: 'User not found' })
 		}
 
 		const existing = await Friendship.findOne({
@@ -28,7 +28,7 @@ router.post('/request', verifyToken, async (req: Request, res: Response) => {
 		})
 
 		if (existing) {
-			return res.status(409).json({ message: '已發送過好友請求' })
+			return res.status(409).json({ detail: 'Friend request already exists' })
 		}
 		const rawFriendship = new Friendship({
 			requester: requesterId,
@@ -57,9 +57,9 @@ router.post('/request', verifyToken, async (req: Request, res: Response) => {
 			status: rawFriendship.status,
 			updatedAt: rawFriendship.updatedAt,
 		})
-		res.status(201).json({ message: '好友請求已發送', friendship })
+		res.status(201).json({ friendship })
 	} catch {
-		res.status(500).json({ message: '無法發送好友請求' })
+		res.status(500).json({ datail: 'Internal Server Error' })
 	}
 })
 
@@ -70,11 +70,11 @@ router.put('/request/:requestId', verifyToken, async (req: Request, res: Respons
 		const friendship = await Friendship.findById(requestId)
 
 		if (!friendship) {
-			return res.status(404).json({ message: '找不到該好友請求' })
+			return res.status(404).json({ detail: 'Friend request not found' })
 		}
 
 		if (friendship.recipient.toString() !== req.userId) {
-			return res.status(403).json({ message: '沒有操作權限' })
+			return res.status(403).json({ detail: 'Permission denied' })
 		}
 
 		friendship.status = 'accepted'
@@ -84,9 +84,9 @@ router.put('/request/:requestId', verifyToken, async (req: Request, res: Respons
 		const io = req.app.get('io')
 		io.to(friendship.requester.toString()).emit('friend-request-accepted', friendship._id)
 
-		res.json({ message: '成功接受好友邀請' })
+		res.sendStatus(200)
 	} catch {
-		res.status(500).json({ message: '無法同意好友邀請' })
+		res.status(500).json({ detail: 'Internal server error' })
 	}
 })
 
@@ -96,11 +96,11 @@ router.delete('/request/:requestId', verifyToken, async (req: Request, res: Resp
 		const friendship = await Friendship.findById(requestId)
 
 		if (!friendship) {
-			return res.status(404).json({ message: '找不到該好友請求' })
+			return res.status(404).json({ detail: 'Friend request not found' })
 		}
 
 		if (friendship.recipient.toString() !== req.userId) {
-			return res.status(403).json({ message: '沒有操作權限' })
+			return res.status(403).json({ detail: 'Validation error' })
 		}
 
 		await friendship.deleteOne()
@@ -108,9 +108,9 @@ router.delete('/request/:requestId', verifyToken, async (req: Request, res: Resp
 		const io = req.app.get('io')
 		io.to(friendship.requester.toString()).emit('friend-request-rejected', requestId)
 
-		res.json({ message: '成功拒絕好友邀請' })
+		res.sendStatus(200)
 	} catch {
-		res.status(500).json({ message: '無法拒絕好友邀請' })
+		res.status(500).json({ detail: 'Internal server error' })
 	}
 })
 
@@ -134,9 +134,9 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
 				updatedAt: rawFriendship.updatedAt,
 			}
 		})
-		res.json({ friendships, message: '成功取得好友關係' })
+		res.json({ friendships })
 	} catch {
-		res.status(500).json({ message: '無法取得好友資料' })
+		res.status(500).json({ detail: 'Internal server error' })
 	}
 })
 

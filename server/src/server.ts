@@ -13,6 +13,7 @@ import userRouter from './routes/user'
 import postRouter from './routes/post'
 import conversationRouter from './routes/conversation'
 import friendshipRouter from './routes/friendship'
+import messageRouter from './routes/message'
 import { initializeSocket } from './socket'
 
 const app = express()
@@ -32,6 +33,7 @@ app.use('/api/user', userRouter)
 app.use('/api/posts', postRouter)
 app.use('/api/friendship', friendshipRouter)
 app.use('/api/conversation', conversationRouter)
+app.use('/api/message', messageRouter)
 
 // MongoDB connection
 mongoose

@@ -3,13 +3,25 @@ import { computed, ref } from 'vue'
 import type { FriendShip } from '@/types'
 export const useFriendStore = defineStore('friend', () => {
 	const friendships = ref<FriendShip[]>([])
-
+	const onlineFriends = ref<Set<string>>(new Set())
+	const setOnlineFriends = (ids: string[]) => {
+		onlineFriends.value = new Set(ids)
+	}
+	const addOnlineFriend = (id: string) => {
+		onlineFriends.value.add(id)
+	}
+	const removeOnlineFriend = (id: string) => {
+		onlineFriends.value.delete(id)
+	}
 	const friends = computed(() => {
 		return friendships.value
 			.filter((friendship) => friendship.status === 'accepted')
 			.map((friendship) => {
 				return { requestId: friendship._id, friendData: friendship.friendData }
 			})
+	})
+	const friendMap = computed(() => {
+		return new Map(friends.value.map((friend) => [friend.friendData._id, friend.friendData]))
 	})
 	const receivedRequests = computed(() => {
 		return friendships.value
@@ -38,9 +50,6 @@ export const useFriendStore = defineStore('friend', () => {
 				}
 			})
 	})
-	// const friendMap = computed(
-	// 	() => new Map(friends.value.map((friend) => [friend.friendData._id, friend.friendData])),
-	// )
 
 	const addFriendship = (friendship: FriendShip) => {
 		friendships.value.unshift(friendship)
@@ -60,8 +69,13 @@ export const useFriendStore = defineStore('friend', () => {
 	}
 	return {
 		friends,
+		onlineFriends,
+		friendMap,
 		receivedRequests,
 		sentRequests,
+		setOnlineFriends,
+		addOnlineFriend,
+		removeOnlineFriend,
 		updateStatusToAccepted,
 		addFriendship,
 		setFriendshipData,

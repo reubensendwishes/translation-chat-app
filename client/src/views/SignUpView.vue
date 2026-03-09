@@ -127,10 +127,10 @@
 			}
 		} catch (error) {
 			if (axios.isAxiosError(error) && error.response) {
-				formError.value = error.response.data.message || '註冊失敗'
+				formError.value = error.response.data.detail || 'Registration failed'
 			} else {
 				console.error('提交失敗:', error)
-				formError.value = '網路錯誤，請稍後重試'
+				formError.value = 'Internal server error'
 			}
 		} finally {
 			isLoading.value = false

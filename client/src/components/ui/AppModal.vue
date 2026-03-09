@@ -26,26 +26,21 @@
 
 	type Props = {
 		teleportTo?: string
-		modelValue?: boolean
 	}
 
-	type Emits = {
-		'update:modelValue': [value: boolean]
-	}
-	const { teleportTo = 'body', modelValue } = defineProps<Props>()
-
-	const emit = defineEmits<Emits>()
+	const { teleportTo = 'body' } = defineProps<Props>()
 
 	const internalOpen = ref(false)
 
+	const model = defineModel<boolean | undefined>()
 	const isControlled = computed(() => {
-		return modelValue !== undefined
+		return model.value !== undefined
 	})
 	const isModalOpen = computed({
-		get: () => (isControlled.value ? modelValue! : internalOpen.value),
+		get: () => (isControlled.value ? model.value! : internalOpen.value),
 		set: (val: boolean) => {
 			if (isControlled.value) {
-				emit('update:modelValue', val)
+				model.value = val
 			} else {
 				internalOpen.value = val
 			}
@@ -60,6 +55,7 @@
 	.modal {
 		position: absolute;
 		inset: 0;
+		z-index: 1000;
 	}
 	.modal-backdrop {
 		width: 100%;

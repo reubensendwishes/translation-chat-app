@@ -20,8 +20,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 
 		if (!token) {
 			return res.status(401).json({
-				errorCode: 'NO_TOKEN',
-				message: '未提供token',
+				datail: 'Invalid token',
 			})
 		}
 
@@ -32,14 +31,12 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 	} catch (error) {
 		if (error instanceof jwt.TokenExpiredError) {
 			return res.status(401).json({
-				errorCode: 'TOKEN_EXPIRED',
-				message: 'accessToken已過期',
+				datail: 'Token has expired',
 			})
 		}
 
 		return res.status(401).json({
-			errorCode: 'INVALID_TOKEN',
-			message: '無效的token',
+			datail: 'Invalid token',
 		})
 	}
 }

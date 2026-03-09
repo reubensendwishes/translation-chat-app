@@ -26,7 +26,7 @@ router.get('/:username', verifyToken, async (req: Request, res: Response) => {
 		})
 
 		if (!user) {
-			return res.status(404).json({ message: '用戶不存在' })
+			return res.status(404).json({ message: 'User Not Found' })
 		}
 		const friendCount = await Friendship.countDocuments({
 			$or: [
@@ -45,7 +45,7 @@ router.get('/:username', verifyToken, async (req: Request, res: Response) => {
 		}
 		res.json(userData)
 	} catch {
-		res.status(500).json({ message: '伺服器錯誤' })
+		res.status(500).json({ detail: 'Internal server error' })
 	}
 })
 
@@ -53,16 +53,15 @@ router.put('/me', verifyToken, async (req: Request, res: Response) => {
 	try {
 		const userId = req.userId
 		const { description } = req.body
-		console.log(description)
 		if (description && description.length > 150) {
-			return res.status(400).json({ message: '個人簡介不能超過150個字元' })
+			return res.status(400).json({ detail: 'Validation error' })
 		}
 		const user = await User.findByIdAndUpdate(userId, { description }, { new: true }).select(
 			'fullName username email avatar description',
 		)
 		res.json(user)
 	} catch {
-		res.status(500).json({ message: '無法更新user資料' })
+		res.status(500).json({ detail: 'Internal server error' })
 	}
 })
 

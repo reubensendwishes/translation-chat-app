@@ -38,16 +38,26 @@ export type UserData = {
 	fullName: string
 	avatar: string
 }
-
 export type FriendShip = {
 	_id: string
 	friendData: UserData
 	myRole: 'requester' | 'recipient'
 	status: 'accepted' | 'pending'
-	updatedAt: Date
+	updatedAt: string
 }
 export type Conversation = {
 	conversationId: string
-	recipientData: UserData
-	createdAt: Date
+	recipientId: string
+	avatar: string
+	username: string
+	updatedAt: string
+}
+
+export type Message = {
+	_id?: string
+	localKey?: string
+	conversationId: string
+	senderId: string
+	text: string
+	createdAt?: string
 }

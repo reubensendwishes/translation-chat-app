@@ -73,7 +73,7 @@
 				router.push('/')
 			}
 		} else {
-			formError.value = result.message || '登入失敗'
+			formError.value = result.detail || 'Login failed'
 		}
 
 		isLoading.value = false
