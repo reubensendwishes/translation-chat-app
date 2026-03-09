@@ -1,8 +1,8 @@
-import { io } from 'socket.io-client'
-import type { Socket } from 'socket.io-client'
 import { useFriendStore } from '@/stores/FriendStore'
-import { useMessageStore } from './stores/MessageStore'
 import { storeToRefs } from 'pinia'
+import type { Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
+import { useMessageStore } from './stores/MessageStore'
 
 let socket: Socket | null = null
 
@@ -23,6 +23,7 @@ export const connectSocket = (token: string) => {
 	} = friendStore
 
 	const messageStore = useMessageStore()
+	const { currentConversationId } = storeToRefs(messageStore)
 	const { getMessageCache } = messageStore
 
 	socket.on('connect', () => {
@@ -42,11 +43,11 @@ export const connectSocket = (token: string) => {
 		removeOnlineFriend(userId)
 	})
 	socket.on('message-received', (message) => {
+		if (message.conversationId === currentConversationId.value) return
 		const messageCache = getMessageCache(message.conversationId)
-		if (messageCache) {
-			if (messageCache.length > 200) messageCache.shift()
-			messageCache.push(message)
-		}
+		if (!messageCache) return
+		messageCache.push(message)
+		if (messageCache.length > 200) messageCache.shift()
 	})
 
 	socket.on('connect_error', (err) => {

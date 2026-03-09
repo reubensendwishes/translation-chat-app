@@ -8,12 +8,17 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
 
-	import ConversationList from '@/views/message/ConversationList.vue'
-	import ChatBox from '@/views/message/ChatBox.vue'
+	import { useMessageStore } from '@/stores/MessageStore'
 	import type { Conversation } from '@/types'
+	import ChatBox from '@/views/message/ChatBox.vue'
+	import ConversationList from '@/views/message/ConversationList.vue'
+	import { storeToRefs } from 'pinia'
 
+	const messageStore = useMessageStore()
+	const { currentConversationId } = storeToRefs(messageStore)
 	const handleSelect = (conversation: Conversation) => {
 		currentConversation.value = conversation
+		currentConversationId.value = conversation.conversationId
 	}
 	const currentConversation = ref<Conversation | null>(null)
 </script>

@@ -1,6 +1,6 @@
+import type { Message } from '@/types'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { Message } from '@/types'
 
 export const useMessageStore = defineStore('message', () => {
 	const messageCacheMap = ref(new Map<string, Message[]>())
@@ -11,5 +11,6 @@ export const useMessageStore = defineStore('message', () => {
 		messageCacheMap.value.set(conversationId, messages)
 	}
 
-	return { messageCacheMap, getMessageCache, setMessageCache }
+	const currentConversationId = ref<string | null>(null)
+	return { messageCacheMap, getMessageCache, setMessageCache, currentConversationId }
 })
