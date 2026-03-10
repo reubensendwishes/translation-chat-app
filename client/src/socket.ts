@@ -7,10 +7,6 @@ import { useMessageStore } from './stores/MessageStore'
 let socket: Socket | null = null
 
 export const connectSocket = (token: string) => {
-	socket = io('http://localhost:5000', {
-		auth: { token },
-	})
-
 	const friendStore = useFriendStore()
 	const { friends } = storeToRefs(friendStore)
 	const {
@@ -26,9 +22,13 @@ export const connectSocket = (token: string) => {
 	const { currentConversationId } = storeToRefs(messageStore)
 	const { getMessageCache } = messageStore
 
-	socket.on('connect', () => {
-		console.log('Socket connected')
+	socket = io('http://localhost:5000', {
+		auth: { token },
+	})
 
+	// socket.on('connect', () => {
+	// })
+	socket.on('server-ready', () => {
 		const friendIds = friends.value.map((friend) => {
 			return friend.friendData._id
 		})

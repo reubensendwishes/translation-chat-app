@@ -10,7 +10,23 @@ export const useMessageStore = defineStore('message', () => {
 	const setMessageCache = (conversationId: string, messages: Message[]) => {
 		messageCacheMap.value.set(conversationId, messages)
 	}
+	const hasMoreMessagesMap = ref(new Map<string, boolean>())
+
+	const getHasMoreMessages = (conversationId: string) => {
+		return hasMoreMessagesMap.value.get(conversationId)
+	}
+	const setHasMoreMessages = (conversationId: string, hasMore: boolean) => {
+		hasMoreMessagesMap.value.set(conversationId, hasMore)
+	}
 
 	const currentConversationId = ref<string | null>(null)
-	return { messageCacheMap, getMessageCache, setMessageCache, currentConversationId }
+	return {
+		messageCacheMap,
+		getMessageCache,
+		setMessageCache,
+		hasMoreMessagesMap,
+		getHasMoreMessages,
+		setHasMoreMessages,
+		currentConversationId,
+	}
 })

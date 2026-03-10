@@ -3,10 +3,4 @@
 
 conversationId是否要在每個message object內？
 
-
-設定緩存
-時間點
-
-當前對話接收者
-
-排除當前對話
+<div ref="loadMoreTrigger" class="load-more-trigger"></div>

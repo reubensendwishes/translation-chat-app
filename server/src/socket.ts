@@ -49,34 +49,6 @@ export const initializeSocket = (server: Server) => {
 	})
 
 	io.on('connection', async (socket: AuthenticatedSocket) => {
-		console.log(`User ${socket.userId} connected`)
-
-		if (socket.userId) {
-			socket.join(socket.userId)
-
-			const conversations = await Conversation.find({ members: socket.userId })
-			console.log(conversations)
-			conversations.forEach((conversation) => {
-				console.log(conversation)
-				socket.join(conversation._id.toString())
-			})
-			onlineUsers.add(socket.userId)
-
-			const friendships = await Friendship.find({
-				$or: [{ requester: socket.userId }, { recipient: socket.userId }],
-				status: 'accepted',
-			})
-			const friendIds = friendships.map((friendship) => {
-				if (friendship.requester.toString() === socket.userId) {
-					return friendship.recipient.toString()
-				}
-				return friendship.requester.toString()
-			})
-			for (const friendId of friendIds) {
-				io.to(friendId).emit('user-online', socket.userId)
-			}
-		}
-
 		socket.on('get-online-friends', async (friendIds: string[], callback) => {
 			const onlineFriends = friendIds.filter((friendId) => onlineUsers.has(friendId))
 			callback(onlineFriends)
@@ -135,19 +107,6 @@ export const initializeSocket = (server: Server) => {
 				}
 			},
 		)
-
-		// 打字中的狀態 尚未新增該功能
-		// socket.on('user-typing', (data: { conversationId: string; username: string }) => {
-		// 	socket
-		// 		.to(data.conversationId)
-		// 		.emit('user-typing', { userId: socket.userId, username: data.username })
-		// })
-		// 停止打字 尚未新增該功能
-		// socket.on('user-stop-typing', (conversationId: string) => {
-		// 	socket.to(conversationId).emit('user-stop-typing', { userId: socket.userId })
-		// })
-
-		// 斷線事件
 		socket.on('disconnect', async () => {
 			const friendships = await Friendship.find({
 				$or: [{ requester: socket.userId }, { recipient: socket.userId }],
@@ -168,6 +127,31 @@ export const initializeSocket = (server: Server) => {
 			}
 			console.log(`User ${socket.userId} disconnected`)
 		})
+		socket.emit('server-ready')
+
+		if (socket.userId) {
+			socket.join(socket.userId)
+			onlineUsers.add(socket.userId)
+
+			const conversations = await Conversation.find({ members: socket.userId })
+			conversations.forEach((conversation) => {
+				socket.join(conversation._id.toString())
+			})
+
+			const friendships = await Friendship.find({
+				$or: [{ requester: socket.userId }, { recipient: socket.userId }],
+				status: 'accepted',
+			})
+			const friendIds = friendships.map((friendship) => {
+				if (friendship.requester.toString() === socket.userId) {
+					return friendship.recipient.toString()
+				}
+				return friendship.requester.toString()
+			})
+			for (const friendId of friendIds) {
+				io.to(friendId).emit('user-online', socket.userId)
+			}
+		}
 	})
 	return io
 }
