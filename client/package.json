@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
+    "deploy": "npm run build && gh-pages -d dist",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"
   },
