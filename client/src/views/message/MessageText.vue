@@ -70,7 +70,7 @@
 			let translation: string | undefined
 			console.log(message.translation)
 			if (!message.translation) {
-				const res = await axios.get(`/api/message/${message._id}/translate`, {
+				const res = await axios.get(`/api/messages/${message._id}/translate`, {
 					params: { targetLang: locale.value },
 				})
 				translation = res.data.translation
