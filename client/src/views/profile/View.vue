@@ -39,7 +39,7 @@
 	const profileData = ref<ProfileData | null>(null)
 	const fetchUser = async () => {
 		try {
-			const res = await axios.get(`/api/user/${route.params.username}`)
+			const res = await axios.get(`/api/users/${route.params.username}`)
 			profileData.value = res.data
 		} catch (error) {
 			handleRequestError(error)

@@ -9,7 +9,7 @@ export const useFriend = () => {
 
 	const fetchFriendshipData = async () => {
 		try {
-			const res = await axios.get('/api/friendship')
+			const res = await axios.get('/api/friendships')
 			const { friendships } = res.data
 			setFriendshipData(friendships)
 			return { success: true }
@@ -19,7 +19,7 @@ export const useFriend = () => {
 	}
 	const acceptFriendRequest = async (requestId: string) => {
 		try {
-			await axios.patch(`/api/friendship/${requestId}`)
+			await axios.patch(`/api/friendships/${requestId}`)
 			updateStatusToAccepted(requestId)
 			return { success: true }
 		} catch (error) {
@@ -28,7 +28,7 @@ export const useFriend = () => {
 	}
 	const sendFriendRequest = async (recipientId: string) => {
 		try {
-			const res = await axios.post('/api/friendship', { recipientId })
+			const res = await axios.post('/api/friendships', { recipientId })
 			const { friendship } = res.data
 			addFriendship(friendship)
 			return { success: true }
@@ -38,7 +38,7 @@ export const useFriend = () => {
 	}
 	const refuseFriendRequest = async (requestId: string) => {
 		try {
-			await axios.delete(`/api/friendship/${requestId}`)
+			await axios.delete(`/api/friendships/${requestId}`)
 			removeFriendship(requestId)
 			return { success: true }
 		} catch (error) {
