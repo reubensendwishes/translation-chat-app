@@ -70,7 +70,7 @@
 				emit('select', existing)
 				return { success: true }
 			}
-			const res = await axios.post('/api/conversation', { friendId })
+			const res = await axios.post('/api/conversations', { friendId })
 			const { _id, recipientId, updatedAt } = res.data
 			const friendData = friendMap.value.get(recipientId)
 			if (!friendData) return
@@ -99,7 +99,7 @@
 
 	onMounted(async () => {
 		try {
-			const res = await axios.get('/api/conversation')
+			const res = await axios.get('/api/conversations')
 			const rawConversations = res.data
 
 			for (const rawConversation of rawConversations) {

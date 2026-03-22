@@ -129,7 +129,7 @@
 			}
 
 			try {
-				const res = await axios.get('/api/message', {
+				const res = await axios.get('/api/messages', {
 					params: {
 						conversationId,
 						limit: 50,

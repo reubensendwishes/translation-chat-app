@@ -82,7 +82,7 @@
 						const prevScrollHeight = chatContentRef.value!.scrollHeight
 
 						try {
-							const res = await axios.get('/api/message', {
+							const res = await axios.get('/api/messages', {
 								params: { _id, cursor, limit: 50 },
 							})
 

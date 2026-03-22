@@ -109,7 +109,7 @@
 		const formData = new FormData()
 		formData.append('avatar', file)
 		try {
-			await axios.put('api/user/me/avatar', formData)
+			await axios.put('api/users/me/avatar', formData)
 			return { success: true }
 		} catch (error) {
 			handleRequestError(error)
@@ -134,7 +134,7 @@
 		if (isLoadingSubmit.value) return
 		isLoadingSubmit.value = true
 		try {
-			const res = await axios.put('/api/user/me', {
+			const res = await axios.put('/api/users/me', {
 				description: profileFields.value.pepBio.value,
 			})
 			originalFieldValues.value.pepBio = res.data.description
@@ -150,7 +150,7 @@
 
 	onMounted(async () => {
 		try {
-			const res = await axios.get(`/api/user/me`)
+			const res = await axios.get(`/api/users/me`)
 			editProfileData.value = res.data
 			if (res.data.description) {
 				profileFields.value.pepBio.value = res.data.description

@@ -29,11 +29,11 @@ app.use(express.json({ limit: '10mb' }))
 
 // routes
 app.use('/api/auth', authRouter)
-app.use('/api/user', usersRouter)
+app.use('/api/users', usersRouter)
 app.use('/api/posts', postsRouter)
-app.use('/api/friendship', friendshipsRouter)
-app.use('/api/conversation', conversationsRouter)
-app.use('/api/message', messagesRouter)
+app.use('/api/friendships', friendshipsRouter)
+app.use('/api/conversations', conversationsRouter)
+app.use('/api/messages', messagesRouter)
 
 // MongoDB connection
 mongoose
