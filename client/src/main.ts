@@ -30,23 +30,26 @@ const { fetchFriendshipData } = useFriend()
 const { refreshAccessToken } = useAuth()
 const { fetchSavedPostIds } = usePost()
 
-initAuth()
+async function init() {
+	initAuth()
 
-if (accessToken.value) {
-	await refreshAccessToken()
-	await Promise.all([fetchFriendshipData(), fetchSavedPostIds()])
-	connectSocket(accessToken.value)
+	if (accessToken.value) {
+		await refreshAccessToken()
+		await Promise.all([fetchFriendshipData(), fetchSavedPostIds()])
+		connectSocket(accessToken.value)
+	}
+
+	setInterval(
+		async () => {
+			if (isLoggedIn.value) {
+				await refreshAccessToken()
+			}
+		},
+		10 * 60 * 1000,
+	)
+
+	setupAxiosInterceptors()
 }
-
-setInterval(
-	async () => {
-		if (isLoggedIn.value) {
-			await refreshAccessToken()
-		}
-	},
-	10 * 60 * 1000,
-)
-
-setupAxiosInterceptors()
+init()
 
 app.mount('#app')
