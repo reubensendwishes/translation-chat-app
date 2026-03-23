@@ -16,7 +16,7 @@ import { usePost } from './composables/usePost'
 const app = createApp(App)
 
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = 'http://localhost:5000'
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
 
 app.use(createPinia())
 app.use(router)
