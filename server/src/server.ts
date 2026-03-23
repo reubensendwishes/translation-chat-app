@@ -50,7 +50,7 @@ app.set('io', io)
 
 // start server
 server.listen(config.PORT, () => {
-	console.log(`Server running at http://localhost:${config.PORT}`)
+	console.log(`Server running on port ${config.PORT}`)
 })
 
 // shutdown
