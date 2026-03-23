@@ -1,1 +1,0 @@
-import{_ as t,m as n,p as o,h as s}from"./index-DqcBvcIG.js";const r={},a={class:"not-found-container"};function c(_,e){return s(),n("div",a,[...e[0]||(e[0]=[o("strong",{class:"text-warning"},"抱歉，找不到此頁面",-1)])])}const i=t(r,[["render",c]]);export{i as default};
