@@ -69,12 +69,12 @@
 	const sendMessage = async (e: KeyboardEvent) => {
 		if (e.isComposing) return
 		const text = getInputValue().trim()
-		const { conversationId } = currentConversation
+		const { _id: conversationId } = currentConversation
 		if (text) {
 			const message: Message = {
 				localKey: crypto.randomUUID(),
 				conversationId,
-				senderId: user.value!.id,
+				senderId: user.value!._id,
 				text,
 			}
 			emit('sendMessage', message)
