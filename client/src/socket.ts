@@ -22,12 +22,10 @@ export const connectSocket = (token: string) => {
 	const { currentConversationId } = storeToRefs(messageStore)
 	const { getMessageCache } = messageStore
 
-	socket = io('http://localhost:5000', {
+	socket = io(import.meta.env.VITE_API_URL, {
 		auth: { token },
 	})
 
-	// socket.on('connect', () => {
-	// })
 	socket.on('server-ready', () => {
 		const friendIds = friends.value.map((friend) => {
 			return friend.friendData._id
