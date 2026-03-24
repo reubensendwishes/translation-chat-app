@@ -134,11 +134,9 @@
 		requestAnimationFrame(playCarousel)
 	}
 	onMounted(() => {
-		// startAutoPlay()
 		requestAnimationFrame(playCarousel)
 	})
 	onUnmounted(() => {
-		// stopAutoPlay()
 		if (progressTween) {
 			progressTween.revert()
 		}
