@@ -31,18 +31,21 @@
 </template>
 
 <script setup lang="ts">
+	import { computed } from 'vue'
 	import { useI18n } from 'vue-i18n'
 
 	import LogoText from '@/components/icons/LogoText.vue'
 	import GSymbol from '@/components/icons/GSymbol.vue'
 	import AppDropdown from '@/components/ui/AppDropdown.vue'
-	import type { DropdownItem, HamburgerItem } from '@/types'
+	import type { DropdownItem } from '@/types'
 	import AppHamburger from '@/components/ui/AppHamburger.vue'
 
 	// vue-i18n
 	const { t, locale } = useI18n()
 
-	const linkItems: HamburgerItem[] = [{ name: t('navbar.about'), path: '/about' }]
+	const linkItems = computed(() => {
+		return [{ name: t('navbar.about'), path: '/about' }]
+	})
 
 	const languageItems: DropdownItem[] = [
 		{ text: 'Tiếng Việt', value: 'vi' },
