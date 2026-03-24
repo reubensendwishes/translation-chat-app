@@ -106,3 +106,9 @@ export type EditProfileData = {
 	avatar?: string
 	description?: string
 }
+
+export type CardData = {
+	imageUrl?: string
+	title: string
+	description: string
+}
