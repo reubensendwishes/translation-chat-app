@@ -15,3 +15,11 @@
 		return layouts[route.meta.layout ?? 'TopNavLayout']
 	})
 </script>
+
+<style>
+	#app {
+		min-height: 100dvh;
+		display: flex;
+		flex-direction: column;
+	}
+</style>
