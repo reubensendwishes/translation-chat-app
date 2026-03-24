@@ -50,6 +50,23 @@
       "description": "Tôi cũng không biết phải nói gì, tóm lại đây là bản tóm tắt của trang About, tóm lại là như vậy.Tôi cũng không biết phải nói gì, tóm lại đây là bản tóm tắt của trang About, tóm lại là như vậy."
     }
   },
+  "about": {
+    "title": "Về Thì Thầm Rồng",
+    "contentTitle": "Về trang web",
+    "description": "Trang web này là một trang web nhắn tin văn bản thời gian thực dùng để luyện tập, tích hợp Google Translation API để tạo chức năng dịch thuật đơn giản, chỉ hỗ trợ dịch giữa tiếng Việt và tiếng Trung. Ban đầu được tạo ra vì nhu cầu cá nhân khi muốn dùng tiếng Việt, nhưng các ứng dụng nhắn tin phổ biến đã có thể dịch từng tin nhắn với nhiều tính năng hơn, nên trang marketing này không có nhiều ý nghĩa, chỉ coi như bài tập thực hành.",
+    "feature1": {
+      "title": "Nhắn tin văn bản",
+      "description": "Xây dựng giao tiếp hai chiều thời gian thực bằng socket.IO, giúp cuộc trò chuyện giữa các người dùng có độ trễ thấp hơn."
+    },
+    "feature2": {
+      "title": "Chức năng dịch thuật",
+      "description": "Cung cấp nút dịch bên cạnh bài đăng và tin nhắn chat, tích hợp Google Cloud Translation API để dịch tiếng Việt hoặc tiếng Trung sang ngôn ngữ hiện tại của trang."
+    },
+    "feature3": {
+      "title": "Đăng bài",
+      "description": "Người dùng có thể đăng bài để hiển thị trên trang hồ sơ cá nhân, hiện tại mỗi bài chỉ hỗ trợ tải lên một hình ảnh kèm mô tả văn bản."
+    }
+  },
   "profile": {
     "post": "Bài đăng",
     "friend": "Bạn",

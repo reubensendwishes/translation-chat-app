@@ -48,6 +48,23 @@
       "description": "我也不知道要說啥，總之這是about頁面的摘要，總之就是這樣。我也不知道要說啥，總之這是about頁面的摘要，總之就是這樣。我也不知道要說啥，總之這是about頁面的摘要，總之就是這樣。"
     }
   },
+  "about": {
+    "title": "關於悄悄龍",
+    "contentTitle": "關於網頁",
+    "description": "本網頁是個練習用即時文字通訊網站，串聯google的translation api，來製作簡易的翻譯功能，翻譯語言只有越南文和中文，原本是個人需求才打算用越南語的，不過主流通訊軟體就可以逐個訊息翻譯，功能還更多，marketing page沒啥存在意義，就當練習用。",
+    "feature1": {
+      "title": "文字通訊",
+      "description": "以socket.IO建立即時雙向通訊，讓user之間的對話可以較低延遲。"
+    },
+    "feature2": {
+      "title": "翻譯功能",
+      "description": "在貼文和聊天訊息旁提供翻譯按鈕，串接Google Cloud Translation API，將越南語或中文翻譯成目前的頁面語言。"
+    },
+    "feature3": {
+      "title": "發佈貼文",
+      "description": "user可以發佈貼文在自己的profile頁面展示，貼文目前只能上傳一張圖片和文字描述。"
+    }
+  },
   "profile": {
     "post": "貼文",
     "friend": "朋友",
