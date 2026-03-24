@@ -1,16 +1,16 @@
 <template>
 	<header class="bg-default">
-		<MarketingNav />
+		<TopNav />
 	</header>
 	<main>
 		<slot></slot>
 	</main>
-	<MarketingFooter />
+	<TopNavFooter />
 </template>
 
 <script setup lang="ts">
-	import MarketingFooter from '@/components/layout/TopNavFooter.vue'
-	import MarketingNav from '@/components/layout/TopNav.vue'
+	import TopNavFooter from '@/components/layout/TopNavFooter.vue'
+	import TopNav from '@/components/layout/TopNav.vue'
 </script>
 
 <style scoped>
