@@ -110,16 +110,26 @@ input {
 .d-inline-flex {
 	display: inline-flex;
 }
+
 .show-md,
 .show-lg {
 	display: none;
 }
+.show-sm {
+	display: initial;
+}
 @media (min-width: 768px) {
+	.show-sm {
+		display: none;
+	}
 	.show-md {
 		display: initial;
 	}
 }
 @media (min-width: 992px) {
+	.show-md {
+		display: none;
+	}
 	.show-lg {
 		display: initial;
 	}
