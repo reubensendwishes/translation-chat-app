@@ -109,9 +109,6 @@
 	.nav-right {
 		gap: 10px;
 	}
-	.nav-right > .btn:not(:last-child) {
-		margin-right: 10px;
-	}
 	.btn {
 		line-height: 0;
 	}
