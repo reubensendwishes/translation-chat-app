@@ -2,7 +2,8 @@
 	<nav class="d-flex">
 		<div class="nav-left">
 			<RouterLink to="/">
-				<LogoText />
+				<LogoText class="show-md show-lg" />
+				<LogoIcon class="show-sm" />
 			</RouterLink>
 		</div>
 		<div class="nav-right d-flex">
@@ -39,6 +40,7 @@
 	import AppDropdown from '@/components/ui/AppDropdown.vue'
 	import type { DropdownItem } from '@/types'
 	import AppHamburger from '@/components/ui/AppHamburger.vue'
+	import LogoIcon from '../icons/LogoIcon.vue'
 
 	// vue-i18n
 	const { t, locale } = useI18n()

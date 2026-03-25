@@ -1,7 +1,10 @@
 <template>
 	<nav class="d-flex bg-default text-primary">
 		<div class="nav-left">
-			<RouterLink to="/"><LogoText /></RouterLink>
+			<RouterLink to="/">
+				<LogoText class="show-md show-lg" />
+				<LogoIcon class="show-sm" />
+			</RouterLink>
 		</div>
 		<div class="nav-right d-flex">
 			<AppDropdown
@@ -62,6 +65,7 @@
 	import CreatePostPanel from './CreatePostPanel.vue'
 	import { useAuth } from '@/composables/useAuth'
 	import { useRouter } from 'vue-router'
+	import LogoIcon from '../icons/LogoIcon.vue'
 
 	// stores
 	const authStore = useAuthStore()
