@@ -145,7 +145,7 @@
 		flex-grow: 1;
 	}
 
-	@media (min-width: 393px) {
+	@media (min-width: 768px) {
 		.post-detail {
 			width: 80dvw;
 		}

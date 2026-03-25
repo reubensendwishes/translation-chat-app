@@ -93,7 +93,7 @@
 	.footer-social-links {
 		gap: 20px;
 	}
-	@media (min-width: 744px) {
+	@media (min-width: 768px) {
 		footer {
 			flex-direction: row;
 			flex-wrap: wrap;
