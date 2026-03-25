@@ -2,7 +2,7 @@
 	<nav class="d-flex">
 		<div class="nav-left">
 			<RouterLink to="/">
-				<LogoText class="text-primary" text-height="40px" />
+				<LogoText />
 			</RouterLink>
 		</div>
 		<div class="nav-right d-flex">
