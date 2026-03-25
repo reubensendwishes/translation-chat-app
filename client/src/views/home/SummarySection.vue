@@ -83,7 +83,7 @@
 		position: relative;
 		flex-basis: 0;
 	}
-	@media (min-width: 744px) {
+	@media (min-width: 768px) {
 		.summary {
 			flex-direction: row;
 		}

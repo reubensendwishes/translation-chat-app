@@ -138,7 +138,7 @@
 	.feature .card {
 		flex-basis: 100%;
 	}
-	@media (min-width: 774px) {
+	@media (min-width: 768px) {
 		.content {
 			width: 80%;
 		}

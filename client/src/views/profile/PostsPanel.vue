@@ -201,7 +201,7 @@
 		grid-template-columns: repeat(3, 1fr);
 		gap: 2px;
 	}
-	@media (min-width: 744px) {
+	@media (min-width: 768px) {
 		.post-list {
 			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 		}
