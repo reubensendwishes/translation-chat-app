@@ -123,8 +123,6 @@
 		text-align: center;
 	}
 	.btn {
-		font-size: 16px;
-		padding: 10px;
 		border-radius: 5px;
 	}
 	.image-picker {

@@ -205,9 +205,7 @@
 	}
 	.change-avatar-btn {
 		margin-left: auto;
-		padding: 6px 10px;
 		border-radius: 8px;
-		font-size: 16px;
 	}
 
 	.change-avatar-btn.disabled {
@@ -231,8 +229,5 @@
 	}
 	.profile-field:last-of-type {
 		margin-bottom: 30px;
-	}
-	.submit-btn {
-		font-size: 18px;
 	}
 </style>
