@@ -68,7 +68,7 @@
 		column-gap: 10px;
 	}
 	.start-chat-btn {
-		padding: 15px;
+		padding: 0 15px;
 		gap: 8px;
 		min-width: fit-content;
 	}
