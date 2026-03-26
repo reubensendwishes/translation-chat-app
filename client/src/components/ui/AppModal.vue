@@ -101,8 +101,7 @@
 		position: absolute;
 		inset: 50% auto auto 50%;
 		transform: translate(-50%, -50%);
-		border-radius: 20px;
-		padding: 10px 0px 16px;
+		border-radius: 16px;
 		flex-direction: column;
 	}
 	.modal-header {
@@ -110,7 +109,7 @@
 		grid-template-columns: 1fr;
 		grid-template-rows: 1fr;
 		border-bottom: 1px var(--color-text-muted) solid;
-		padding: 0 16px 8px;
+		padding: 16px;
 		align-items: center;
 	}
 	.modal-title {
@@ -126,6 +125,7 @@
 		justify-self: end;
 	}
 	.modal-body {
+		padding: 16px;
 		overflow-y: auto;
 	}
 </style>

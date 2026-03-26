@@ -65,9 +65,6 @@
 </script>
 
 <style scoped>
-	.create-chat-panel {
-		padding: 16px 16px 0;
-	}
 	.friend-item {
 		width: 100%;
 		padding: 10px 0;
