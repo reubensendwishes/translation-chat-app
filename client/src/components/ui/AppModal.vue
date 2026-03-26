@@ -97,6 +97,7 @@
 		backdrop-filter: blur(1px);
 	}
 	.modal-content {
+		max-width: 100dvw;
 		max-height: 90dvh;
 		position: absolute;
 		inset: 50% auto auto 50%;
