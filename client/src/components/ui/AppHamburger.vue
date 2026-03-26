@@ -57,6 +57,7 @@
 	}
 	const closeMenu = () => {
 		isMenuOpen.value = false
+		document.body.style.overflow = 'auto'
 	}
 </script>
 
