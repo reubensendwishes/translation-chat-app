@@ -123,7 +123,7 @@
 		margin-bottom: 20px;
 	}
 	.content-title {
-		font-size: 24px;
+		font-size: 20px;
 		margin-bottom: 10px;
 		text-align: center;
 	}
