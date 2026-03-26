@@ -117,7 +117,6 @@
 
 <style scoped>
 	.create-post-panel {
-		padding: 16px 16px 0px;
 		flex-wrap: wrap;
 		justify-content: center;
 		gap: 16px;
