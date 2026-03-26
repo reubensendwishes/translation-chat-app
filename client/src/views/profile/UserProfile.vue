@@ -136,8 +136,7 @@
 		border-radius: 8px;
 	}
 	.badge {
-		font-size: 15px;
-		padding: 6px 12px;
+		padding: 8px;
 		border-radius: 8px;
 	}
 </style>
