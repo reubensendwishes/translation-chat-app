@@ -22,7 +22,7 @@
 				</template>
 			</AppDropdown>
 			<RouterLink to="/message" class="start-chat-btn btn text-inverse bg-inverse pill">
-				<GSymbol class="show-lg" weight="400" font-size="24px">chat</GSymbol>
+				<GSymbol class="show-lg" weight="400" font-size="20px">chat</GSymbol>
 				<span>{{ t('navbar.start') }}</span>
 			</RouterLink>
 
