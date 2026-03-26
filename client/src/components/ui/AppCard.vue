@@ -7,9 +7,9 @@
 			:style="{ width: imageWidth }"
 		/>
 		<div class="title" :style="{ fontSize: titleSize }">{{ cardData.title }}</div>
-		<div class="description" :style="{ fontSize: descriptionSize }">
+		<p class="description" :style="{ fontSize: descriptionSize }">
 			{{ cardData.description }}
-		</div>
+		</p>
 	</div>
 </template>
 
