@@ -197,7 +197,6 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		line-height: 1.5;
 		display: grid;
 		grid-template-columns: max-content max-content;
 		grid-template-rows: 1fr 1fr;
@@ -208,6 +207,7 @@
 	.carousel-text {
 		justify-self: start;
 		white-space: pre;
+		line-height: 1.5;
 	}
 	.carousel-text-bg {
 		background-color: rgba(242, 242, 242, 0.1);
