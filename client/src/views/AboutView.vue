@@ -117,7 +117,6 @@
 	.content {
 		width: min(393px, 100%);
 		margin: 0 auto 20px;
-		line-height: 1.2;
 	}
 
 	.content-header {
