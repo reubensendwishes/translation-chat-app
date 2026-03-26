@@ -49,6 +49,11 @@
 	const isMenuOpen = ref(false)
 	const toggleMenu = () => {
 		isMenuOpen.value = !isMenuOpen.value
+		if (isMenuOpen.value) {
+			document.body.style.overflow = 'hidden'
+		} else {
+			document.body.style.overflow = 'auto'
+		}
 	}
 	const closeMenu = () => {
 		isMenuOpen.value = false
@@ -94,7 +99,7 @@
 		rotate: -45deg;
 	}
 	.hamburger-menu {
-		position: absolute;
+		position: fixed;
 		inset: 0;
 		width: 100%;
 		padding-top: 60px;
