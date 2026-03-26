@@ -56,6 +56,7 @@
 		flex-wrap: wrap;
 		padding: 40px 16px 10px;
 		gap: 20px;
+		max-width: 100dvw;
 	}
 	.profile-info .wrapper {
 		align-self: center;
@@ -83,5 +84,7 @@
 	}
 	.profile-description {
 		flex-basis: 100%;
+		min-width: 0;
+		overflow-wrap: break-word;
 	}
 </style>
