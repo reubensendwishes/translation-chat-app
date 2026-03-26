@@ -132,7 +132,9 @@
 </script>
 
 <style scoped>
-	.btn,
+	.btn {
+		border-radius: 8px;
+	}
 	.badge {
 		font-size: 15px;
 		padding: 6px 12px;

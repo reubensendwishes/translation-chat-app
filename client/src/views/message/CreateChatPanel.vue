@@ -98,9 +98,7 @@
 		border: 7px var(--color-text-primary) solid;
 	}
 	.create-chat-panel .btn {
-		font-size: 18px;
 		width: 100%;
-		padding: 10px 0;
 		border-radius: 10px;
 	}
 </style>

@@ -45,8 +45,6 @@
 
 <style scoped>
 	.btn {
-		font-size: 15px;
-		padding: 6px 12px;
 		border-radius: 8px;
 	}
 </style>

@@ -110,6 +110,7 @@
 		gap: 10px;
 	}
 	.btn {
+		padding: 0;
 		line-height: 0;
 	}
 	.btn:hover {
