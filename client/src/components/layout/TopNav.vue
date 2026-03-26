@@ -26,7 +26,7 @@
 				<span>{{ t('navbar.start') }}</span>
 			</RouterLink>
 
-			<AppHamburger :hamburger-items="linkItems" hamburger-radius="42px" />
+			<AppHamburger :hamburger-items="linkItems" hamburger-radius="46px" />
 		</div>
 	</nav>
 </template>
@@ -68,8 +68,8 @@
 		column-gap: 10px;
 	}
 	.start-chat-btn {
-		height: 42px;
-		padding: 0 13px;
+		/* height: 42px; */
+		padding: 15px;
 		gap: 8px;
 	}
 </style>
