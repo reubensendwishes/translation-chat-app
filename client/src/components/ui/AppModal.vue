@@ -120,6 +120,9 @@
 		grid-row: 1;
 	}
 	.close-btn {
+		overflow: hidden;
+		height: 20px;
+		width: 20px;
 		grid-column: 1/2;
 		grid-row: 1;
 		justify-self: end;
