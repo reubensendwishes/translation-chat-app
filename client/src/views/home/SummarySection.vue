@@ -64,7 +64,7 @@
 
 	.summary-title {
 		margin: 0;
-		font-size: 35px;
+		font-size: 30px;
 	}
 	.summary-subtitle {
 		margin: 0;

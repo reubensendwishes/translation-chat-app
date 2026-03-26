@@ -39,7 +39,7 @@
 	const updateCarouselStyle = () => {
 		const width = window.innerWidth
 		if (width < 744) {
-			carouselHeight.value = 'calc(100dvh - 155px)'
+			carouselHeight.value = 'calc(100dvh - 150px)'
 			carouselFontSize.value = '20px'
 		} else if (width < 1280) {
 			carouselHeight.value = 'calc(100dvh - 60px)'
