@@ -114,17 +114,16 @@
 
 <style scoped>
 	.post-detail {
-		width: 100dvw;
+		width: min(100dvw - 32px, 400px);
 		flex-wrap: wrap;
-		column-gap: 4%;
 		justify-content: center;
 	}
 	.post-img {
-		width: 100%;
+		width: min(100%, 300px);
 		aspect-ratio: 3/4;
 	}
 	.post-content {
-		width: 100%;
+		width: min(100%, 300px);
 		flex-direction: column;
 		gap: 10px;
 		padding: 10px 0;
@@ -144,17 +143,14 @@
 	.post-text-wrapper {
 		flex-grow: 1;
 	}
-
 	@media (min-width: 768px) {
 		.post-detail {
-			width: 80dvw;
+			width: 736px;
+			gap: 16px;
 		}
-
-		.post-img {
-			width: min(48%, 400px);
-		}
+		.post-img,
 		.post-content {
-			width: min(48%, 400px);
+			flex-grow: 1;
 		}
 	}
 </style>
