@@ -130,9 +130,8 @@
 
 	.feature {
 		flex-wrap: wrap;
-		column-gap: 1%;
 		row-gap: 10px;
-		justify-content: center;
+		justify-content: space-between;
 	}
 	.feature .card {
 		flex-basis: 100%;
