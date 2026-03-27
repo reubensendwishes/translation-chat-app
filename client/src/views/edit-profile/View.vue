@@ -171,10 +171,11 @@
 	}
 	header {
 		align-items: center;
-		padding: 0 16px;
+		padding: 3px 16px;
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: 1fr;
+		border-bottom: 1px solid var(--color-text-muted);
 	}
 	main {
 		padding: 40px 16px 60px;
@@ -186,6 +187,7 @@
 		justify-self: start;
 		grid-column: 1;
 		grid-row: 1;
+		line-height: 0;
 	}
 	.header-title {
 		font-size: 16px;
