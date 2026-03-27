@@ -17,7 +17,12 @@
 			</div>
 		</div>
 		<div class="post-list">
-			<AppModal v-for="post in displayedPosts" :key="post._id" width="fit-content">
+			<AppModal
+				class="post-btn"
+				v-for="post in displayedPosts"
+				:key="post._id"
+				width="fit-content"
+			>
 				<template #button>
 					<img
 						class="post-img"
@@ -205,6 +210,9 @@
 		.post-list {
 			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 		}
+	}
+	.post-btn {
+		padding: 0;
 	}
 	.post-img {
 		width: 100%;
