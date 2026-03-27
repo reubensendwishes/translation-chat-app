@@ -5,8 +5,8 @@
 		</div>
 	</template>
 	<template v-else>
-		<header class="text-primary d-flex">
-			<RouterLink :to="backRoute">
+		<header class="text-primary">
+			<RouterLink class="back-btn" :to="backRoute">
 				<GSymbol font-size="30px">arrow_back_ios</GSymbol>
 			</RouterLink>
 			<h1 class="header-title">{{ t('editProfile.title') }}</h1>
@@ -172,6 +172,9 @@
 	header {
 		align-items: center;
 		padding: 0 16px;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr;
 	}
 	main {
 		padding: 40px 16px 60px;
@@ -179,9 +182,14 @@
 	.page-header {
 		margin-bottom: 30px;
 	}
+	.back-btn {
+		grid-column: 1;
+		grid-row: 1;
+	}
 	.header-title {
 		font-size: 17px;
-		flex-grow: 1;
+		grid-column: 1;
+		grid-row: 1;
 		text-align: center;
 	}
 	.page-title {
