@@ -47,12 +47,12 @@
 <style scoped>
 	.summary {
 		flex-direction: column;
+		gap: 20px;
 	}
 	.summary:not(:last-of-type) {
 		margin-bottom: 30px;
 	}
 	.summary-content {
-		margin-bottom: 20px;
 		text-align: center;
 	}
 	.summary-header {
@@ -90,7 +90,6 @@
 		.summary-content {
 			width: 30%;
 			max-width: 400px;
-			margin-right: 20px;
 			text-align: start;
 		}
 		.summary-header {
