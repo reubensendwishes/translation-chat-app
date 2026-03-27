@@ -41,7 +41,7 @@
 	.about-img2 {
 		position: absolute;
 		width: 30%;
-		top: 30%;
+		bottom: -10%;
 		right: 0;
 	}
 </style>
