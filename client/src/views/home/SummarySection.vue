@@ -105,6 +105,7 @@
 			writing-mode: vertical-lr;
 		}
 		.summary-extra {
+			align-self: center;
 			flex-grow: 1;
 		}
 	}
