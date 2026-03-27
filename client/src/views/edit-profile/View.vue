@@ -175,6 +175,7 @@
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: 1fr;
+		border-bottom: 1px solid var(--color-text-muted);
 	}
 	main {
 		padding: 40px 16px 60px;
