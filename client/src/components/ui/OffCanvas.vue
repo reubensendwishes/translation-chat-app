@@ -60,7 +60,7 @@
 		border-right: 1px var(--color-text-muted) solid;
 	}
 	.offcanvas-header {
-		padding: 0px 16px;
+		padding: 8px 16px;
 		align-items: center;
 		display: grid;
 		grid-template-columns: 1fr;
@@ -74,6 +74,10 @@
 		grid-column: 1;
 	}
 	.close-btn {
+		overflow: hidden;
+		padding: 0;
+		height: 20px;
+		width: 20px;
 		grid-row: 1;
 		grid-column: 1;
 		justify-self: end;
