@@ -187,19 +187,18 @@
 		grid-row: 1;
 	}
 	.header-title {
-		font-size: 17px;
+		font-size: 16px;
 		grid-column: 1;
 		grid-row: 1;
 		text-align: center;
 	}
 	.page-title {
-		font-size: 21px;
+		font-size: 20px;
 		margin-bottom: 40px;
 	}
 	.user-info {
 		gap: 12px;
 		align-items: center;
-		font-size: 17px;
 		background-color: var(--color-bg-muted);
 		padding: 10px;
 		border-radius: 10px;

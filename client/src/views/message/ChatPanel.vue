@@ -187,7 +187,6 @@
 		gap: 10px;
 	}
 	.contact-name {
-		font-size: 17px;
 		margin-bottom: 5px;
 	}
 	.contact-state {

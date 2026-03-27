@@ -37,7 +37,6 @@
 		position: relative;
 		flex-direction: column;
 		text-align: start;
-		font-size: 17px;
 	}
 	.field-label {
 		padding-bottom: 20px;
@@ -46,7 +45,6 @@
 		border: solid 1px var(--color-text-muted);
 		border-radius: 10px;
 		padding: 10px;
-		font-size: 17px;
 	}
 	.field-counter {
 		position: absolute;
