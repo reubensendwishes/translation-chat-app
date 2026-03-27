@@ -6,10 +6,10 @@
 	</template>
 	<template v-else>
 		<header class="text-primary">
+			<h1 class="header-title">{{ t('editProfile.title') }}</h1>
 			<RouterLink class="back-btn" :to="backRoute">
 				<GSymbol font-size="30px">arrow_back_ios</GSymbol>
 			</RouterLink>
-			<h1 class="header-title">{{ t('editProfile.title') }}</h1>
 		</header>
 		<main class="text-primary">
 			<div class="page-header">
@@ -183,6 +183,7 @@
 		margin-bottom: 30px;
 	}
 	.back-btn {
+		justify-self: start;
 		grid-column: 1;
 		grid-row: 1;
 	}
