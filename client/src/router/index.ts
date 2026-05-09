@@ -46,7 +46,7 @@ const router = createRouter({
 			name: 'profile',
 			component: () => import('@/views/profile/View.vue'),
 			meta: {
-				layout: 'BottomNavLayout',
+				layout: 'TabBarLayout',
 				requiresAuth: true,
 			},
 			props: (route) => ({ profileUsername: route.params.username as string }),
@@ -56,7 +56,7 @@ const router = createRouter({
 			name: 'editProfile',
 			component: () => import('@/views/edit-profile/View.vue'),
 			meta: {
-				layout: 'BottomNavLayout',
+				layout: 'TabBarLayout',
 				requiresAuth: true,
 			},
 		},
@@ -65,7 +65,7 @@ const router = createRouter({
 			name: 'message',
 			component: () => import('@/views/message/View.vue'),
 			meta: {
-				layout: 'BottomNavLayout',
+				layout: 'TabBarLayout',
 				requiresAuth: true,
 			},
 		},
