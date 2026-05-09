@@ -18,7 +18,7 @@
 					transition-direction="down"
 					placement="bottom"
 				>
-					<template #button>
+					<template #button-name>
 						<GSymbol font-size="24px">language</GSymbol>
 					</template>
 				</AppDropdown>
