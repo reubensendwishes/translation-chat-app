@@ -1,5 +1,5 @@
 <template>
-	<div class="auth-panel text-primary d-flex">
+	<main class="auth-panel text-primary d-flex">
 		<form
 			@submit.prevent="!submitDisabled && $emit('submit', formData)"
 			class="d-flex auth-form"
@@ -59,7 +59,7 @@
 				{{ authCta.linkAdviceText }}
 			</RouterLink>
 		</div>
-	</div>
+	</main>
 </template>
 
 <script setup lang="ts">

@@ -1,34 +1,36 @@
 <template>
-	<nav class="d-flex">
-		<div class="nav-left">
-			<RouterLink to="/">
-				<LogoText class="show-md show-lg" />
-				<LogoIcon class="show-sm" />
-			</RouterLink>
-		</div>
-		<div class="nav-right d-flex">
-			<AppDropdown
-				@select-item="
-					(value) => {
-						locale = value
-					}
-				"
-				:dropdown-items="languageItems"
-				transition-direction="down"
-				placement="bottom"
-			>
-				<template #button>
-					<GSymbol font-size="24px">language</GSymbol>
-				</template>
-			</AppDropdown>
-			<RouterLink to="/message" class="start-chat-btn btn text-inverse bg-inverse pill">
-				<GSymbol class="show-lg" weight="400" font-size="20px">chat</GSymbol>
-				<span>{{ t('navbar.start') }}</span>
-			</RouterLink>
+	<header>
+		<nav class="d-flex">
+			<div class="nav-left">
+				<RouterLink to="/">
+					<LogoText class="show-md show-lg" />
+					<LogoIcon class="show-sm" />
+				</RouterLink>
+			</div>
+			<div class="nav-right d-flex">
+				<AppDropdown
+					@select-item="
+						(value) => {
+							locale = value
+						}
+					"
+					:dropdown-items="languageItems"
+					transition-direction="down"
+					placement="bottom"
+				>
+					<template #button>
+						<GSymbol font-size="24px">language</GSymbol>
+					</template>
+				</AppDropdown>
+				<RouterLink to="/message" class="start-chat-btn btn text-inverse bg-inverse pill">
+					<GSymbol class="show-lg" weight="400" font-size="20px">chat</GSymbol>
+					<span>{{ t('navbar.start') }}</span>
+				</RouterLink>
 
-			<AppHamburger :hamburger-items="linkItems" hamburger-radius="46px" />
-		</div>
-	</nav>
+				<AppHamburger :hamburger-items="linkItems" hamburger-radius="46px" />
+			</div>
+		</nav>
+	</header>
 </template>
 
 <script setup lang="ts">

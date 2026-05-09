@@ -12,7 +12,7 @@ const router = createRouter({
 			name: 'home',
 			component: HomeView,
 			meta: {
-				layout: 'TopNavLayout',
+				layout: 'DefaultLayout',
 			},
 		},
 		{
@@ -20,7 +20,7 @@ const router = createRouter({
 			name: 'login',
 			component: () => import('@/views/LoginView.vue'),
 			meta: {
-				layout: 'NoNavLayout',
+				layout: 'BlankLayout',
 				requiresGuest: true,
 			},
 		},
@@ -29,7 +29,7 @@ const router = createRouter({
 			name: 'signUp',
 			component: () => import('@/views/SignUpView.vue'),
 			meta: {
-				layout: 'NoNavLayout',
+				layout: 'BlankLayout',
 				requiresGuest: true,
 			},
 		},
@@ -38,7 +38,7 @@ const router = createRouter({
 			name: 'about',
 			component: () => import('@/views/AboutView.vue'),
 			meta: {
-				layout: 'TopNavLayout',
+				layout: 'DefaultLayout',
 			},
 		},
 		{
@@ -75,7 +75,7 @@ const router = createRouter({
 			name: 'NotFound',
 			component: () => import('@/views/NotFoundView.vue'),
 			meta: {
-				layout: 'NoNavLayout',
+				layout: 'BlankLayout',
 			},
 		},
 	],

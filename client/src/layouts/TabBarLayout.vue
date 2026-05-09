@@ -1,8 +1,8 @@
 <template>
 	<slot></slot>
-	<BottomNav />
+	<TabBar />
 </template>
 
 <script setup lang="ts">
-	import BottomNav from '@/components/layout/BottomNav.vue'
+	import TabBar from '@/components/layout/TabBar.vue'
 </script>

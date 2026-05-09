@@ -1,16 +1,14 @@
 <template>
-	<header class="bg-default">
-		<TopNav />
-	</header>
+	<AppHeader />
 	<main>
-		<slot></slot>
+		<slot />
 	</main>
-	<TopNavFooter />
+	<AppFooter />
 </template>
 
 <script setup lang="ts">
-	import TopNavFooter from '@/components/layout/TopNavFooter.vue'
-	import TopNav from '@/components/layout/TopNav.vue'
+	import AppFooter from '@/components/layout/AppFooter.vue'
+	import AppHeader from '@/components/layout/AppHeader.vue'
 </script>
 
 <style scoped>
