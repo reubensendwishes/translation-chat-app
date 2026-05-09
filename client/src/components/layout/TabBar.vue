@@ -18,7 +18,7 @@
 				:dropdown-items="languageItems"
 				transition-direction="up"
 			>
-				<template #button>
+				<template #button-name>
 					<GSymbol font-size="30px">language</GSymbol>
 				</template>
 			</AppDropdown>

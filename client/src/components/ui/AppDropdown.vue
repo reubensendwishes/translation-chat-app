@@ -1,28 +1,29 @@
 <template>
-	<button
-		@click="isDropdownOpen = !isDropdownOpen"
-		@blur="isDropdownOpen = false"
-		class="btn text-primary"
-		type="button"
-	>
-		<slot name="button"></slot>
-		<FadeTranslate :transition-direction="transitionDirection">
-			<ul
-				v-show="isDropdownOpen"
-				:style="{ [reference]: '100%' }"
-				class="dropdown-menu bg-default d-flex"
-			>
-				<li
-					@click="$emit('selectItem', dropdownItem.value)"
-					v-for="(dropdownItem, index) in dropdownItems"
-					:key="index"
-					class="dropdown-item text-muted"
-				>
-					{{ dropdownItem.text }}
-				</li>
-			</ul>
-		</FadeTranslate>
-	</button>
+	<div class="dropdown">
+		<div :class="placementClass" class="dropdown-menu-wrapper">
+			<FadeTranslate :transition-direction="transitionDirection">
+				<ul v-show="isDropdownOpen" class="dropdown-menu bg-default d-flex">
+					<li
+						@click="$emit('selectItem', dropdownItem.value)"
+						v-for="(dropdownItem, index) in dropdownItems"
+						:key="index"
+						class="dropdown-item text-muted"
+					>
+						{{ dropdownItem.text }}
+					</li>
+				</ul>
+			</FadeTranslate>
+		</div>
+		<button
+			v-bind="$attrs"
+			class="btn text-primary"
+			type="button"
+			@click="isDropdownOpen = !isDropdownOpen"
+			@blur="isDropdownOpen = false"
+		>
+			<slot name="button-name"></slot>
+		</button>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -51,31 +52,48 @@
 	// emits
 	defineEmits<Emits>()
 
-	const reference = computed(() => {
-		switch (placement) {
-			case 'bottom':
-				return 'top'
-			case 'top':
-				return 'bottom'
-			case 'right':
-				return 'left'
-			case 'left':
-				return 'right'
-			default:
-				return 'top'
-		}
+	// options
+	defineOptions({
+		inheritAttrs: false,
 	})
 
+	const placementClass = computed(() => {
+		return 'placement-' + placement
+	})
 	const isDropdownOpen = ref(false)
 </script>
 
-<style scoped>
-	.btn {
+<style>
+	.dropdown {
 		position: relative;
+		font-size: 18px;
+	}
+	.dropdown-menu-wrapper {
+		position: absolute;
+		overflow: hidden;
+	}
+	.dropdown-menu-wrapper.placement-top {
+		bottom: 100%;
+		transform: translateX(-50%);
+		left: 50%;
+	}
+	.dropdown-menu-wrapper.placement-left {
+		right: 100%;
+		transform: translateY(-50%);
+		top: 50%;
+	}
+	.dropdown-menu-wrapper.placement-bottom {
+		top: 100%;
+		transform: translateX(-50%);
+		left: 50%;
+	}
+	.dropdown-menu-wrapper.placement-right {
+		left: 100%;
+		transform: translateY(-50%);
+		top: 50%;
 	}
 	.dropdown-menu {
 		flex-direction: column;
-		position: absolute;
 		border: solid 1px var(--color-text-primary);
 		padding: 10px 0;
 		gap: 10px;
