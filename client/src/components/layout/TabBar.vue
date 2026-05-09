@@ -29,13 +29,15 @@
 				<template #header>{{ t('navbar.notification.title') }}</template>
 				<NotificationList />
 			</OffCanvas>
-			<AppModal class="btn" v-model="isModalOpen">
-				<template #button>
-					<GSymbol style="font-size: 30px">add_2</GSymbol>
-				</template>
-				<template #header>{{ t('navbar.post.title') }}</template>
-				<CreatePostPanel @close-modal="isModalOpen = false" />
-			</AppModal>
+			<button class="btn text-primary" type="button" @click="isModalOpen = !isModalOpen">
+				<GSymbol style="font-size: 30px">add_2</GSymbol>
+			</button>
+			<Teleport to="#app">
+				<AppModal v-if="isModalOpen" @close="isModalOpen = false">
+					<template #title>{{ t('navbar.post.title') }}</template>
+					<CreatePostPanel @close-modal="isModalOpen = false" />
+				</AppModal>
+			</Teleport>
 			<RouterLink class="btn" to="/message">
 				<GSymbol style="font-size: 30px">chat</GSymbol>
 			</RouterLink>

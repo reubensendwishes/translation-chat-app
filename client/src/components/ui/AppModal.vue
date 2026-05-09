@@ -1,38 +1,34 @@
 <template>
-	<button type="button" class="btn text-primary" @click="toggleModal">
-		<slot name="button"></slot>
-		<Teleport :to="teleportTo">
-			<div
-				@focusin.stop
-				@keydown.escape="isModalOpen = false"
-				v-focus
-				ref="modal"
-				tabindex="-1"
-				v-if="isModalOpen"
-				class="modal text-primary"
-			>
-				<div class="modal-backdrop"></div>
-				<div class="modal-content bg-default d-flex" :style="{ width }">
-					<div class="modal-header">
-						<h2 class="modal-title">
-							<slot name="header"></slot>
-						</h2>
-						<button @click="isModalOpen = false" class="close-btn btn text-primary">
-							<GSymbol style="font-size: 30px">close</GSymbol>
-						</button>
-					</div>
-					<div class="modal-body">
-						<slot></slot>
-					</div>
+	<Teleport :to="teleportTo">
+		<div
+			@focusin.stop
+			@keydown.esc="emit('close')"
+			v-bind="$attrs"
+			v-focus
+			ref="modal"
+			tabindex="-1"
+			class="modal text-primary"
+		>
+			<div v-if="hasBackdrop" class="modal-backdrop" @click="emit('close')"></div>
+			<div class="modal-content bg-default d-flex" :style="{ width }">
+				<div class="modal-header">
+					<h2 class="modal-title">
+						<slot name="title"></slot>
+					</h2>
+					<button @click="emit('close')" class="close-btn btn text-primary">
+						<GSymbol style="font-size: 30px">close</GSymbol>
+					</button>
 				</div>
-				<div @focus="focusModal" tabindex="0" class="prevent-tab"></div>
+				<div class="modal-body">
+					<slot></slot>
+				</div>
 			</div>
-		</Teleport>
-	</button>
+		</div>
+	</Teleport>
 </template>
 
 <script setup lang="ts">
-	import { ref, computed, useTemplateRef, onMounted, onBeforeUnmount } from 'vue'
+	import { useTemplateRef, onMounted, onBeforeUnmount } from 'vue'
 
 	import GSymbol from '@/components/icons/GSymbol.vue'
 
@@ -40,37 +36,31 @@
 	type Props = {
 		teleportTo?: string
 		width?: string
+		hasBackdrop?: boolean
+	}
+	type Emits = {
+		close: []
 	}
 
 	// props
-	const { teleportTo = 'body', width = 'min(393px, 100%)' } = defineProps<Props>()
+	const {
+		teleportTo = 'body',
+		width = 'min(393px, 100%)',
+		hasBackdrop = true,
+	} = defineProps<Props>()
 
-	// models
-	const model = defineModel<boolean | undefined>()
+	// emits
+	const emit = defineEmits<Emits>()
+
+	// options
+	defineOptions({
+		inheritAttrs: false,
+	})
 
 	const modalRef = useTemplateRef('modal')
-	const internalOpen = ref(false)
-	const isControlled = computed(() => {
-		return model.value !== undefined
-	})
-	const isModalOpen = computed({
-		get: () => (isControlled.value ? model.value! : internalOpen.value),
-		set: (val: boolean) => {
-			if (isControlled.value) {
-				model.value = val
-			} else {
-				internalOpen.value = val
-			}
-		},
-	})
-	const toggleModal = async () => {
-		isModalOpen.value = !isModalOpen.value
-	}
-
 	const focusModal = () => {
 		modalRef.value?.focus()
 	}
-
 	onMounted(() => {
 		document.body.addEventListener('focusin', focusModal)
 	})
@@ -84,7 +74,7 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	.modal {
 		position: fixed;
 		inset: 0;
@@ -120,7 +110,7 @@
 		grid-column: 1/2;
 		grid-row: 1;
 	}
-	.close-btn {
+	.modal-header > .close-btn {
 		overflow: hidden;
 		height: 20px;
 		width: 20px;

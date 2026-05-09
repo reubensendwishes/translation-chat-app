@@ -17,31 +17,32 @@
 			</div>
 		</div>
 		<div class="post-list">
-			<AppModal
-				class="post-btn"
-				v-for="post in displayedPosts"
-				:key="post._id"
-				width="fit-content"
-			>
-				<template #button>
+			<template v-for="post in displayedPosts" :key="post._id">
+				<button type="button" class="post-btn" @click="openModalId = post._id">
 					<img
 						class="post-img"
 						:srcset="getImgSrcset(post.imageStoragePaths)"
 						sizes="(max-width: 400px) 100vw,250px"
 						:alt="post.content"
 					/>
-				</template>
-				<template #header>{{
-					t('profile.detail.title', { username: profileUsername })
-				}}</template>
-				<PostDetail
-					@translate="translatePost"
-					:profile-avatar="profileAvatar"
-					:post-data="post"
-					:profile-username="profileUsername"
-					:get-img-srcset="getImgSrcset"
-				/>
-			</AppModal>
+				</button>
+				<AppModal
+					v-if="openModalId === post._id"
+					width="fit-content"
+					@close="openModalId = ''"
+				>
+					<template #title>{{
+						t('profile.detail.title', { username: profileUsername })
+					}}</template>
+					<PostDetail
+						@translate="translatePost"
+						:profile-avatar="profileAvatar"
+						:post-data="post"
+						:profile-username="profileUsername"
+						:get-img-srcset="getImgSrcset"
+					/>
+				</AppModal>
+			</template>
 		</div>
 		<div ref="loadMoreTrigger" class="load-more-trigger"></div>
 		<div v-if="isLoadingPosts" class="post-loading">
@@ -176,6 +177,8 @@
 
 		resolve()
 	}
+
+	const openModalId = ref('')
 	onMounted(async () => {
 		await fetchPosts('all')
 		await nextTick()
