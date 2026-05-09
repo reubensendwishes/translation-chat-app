@@ -12,7 +12,7 @@
 
 	const route: RouteLocationNormalizedLoaded = useRoute()
 	const layout = computed(() => {
-		return layouts[route.meta.layout ?? 'TopNavLayout']
+		return layouts[route.meta.layout ?? 'DefaultLayout']
 	})
 </script>
 

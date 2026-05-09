@@ -1,12 +1,12 @@
 import 'vue-router'
-import TopNavLayout from './layouts/TopNavLayout.vue'
-import BottomNavLayout from './layouts/BottomNavLayout.vue'
-import NoNavLayout from './layouts/NoNavLayout.vue'
+import DefaultLayout from './layouts/DefaultLayout.vue'
+import TabBarLayout from './layouts/TabBarLayout.vue'
+import BlankLayout from './layouts/BlankLayout.vue'
 
 export const layouts = {
-	TopNavLayout,
-	BottomNavLayout,
-	NoNavLayout,
+	DefaultLayout,
+	TabBarLayout,
+	BlankLayout,
 } as const
 
 declare module 'vue-router' {
