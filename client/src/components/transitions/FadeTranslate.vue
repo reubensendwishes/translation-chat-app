@@ -70,7 +70,7 @@
 	.right-enter-active,
 	.right-leave-active {
 		transition:
-			opacity 0.8s ease-out,
-			transform 0.8s ease-out;
+			opacity 0.3s 0.3s ease-out,
+			transform 0.6s ease-out;
 	}
 </style>
