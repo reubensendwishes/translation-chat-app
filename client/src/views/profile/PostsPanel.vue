@@ -26,22 +26,24 @@
 						:alt="post.content"
 					/>
 				</button>
-				<AppModal
-					v-if="openModalId === post._id"
-					width="fit-content"
-					@close="openModalId = ''"
-				>
-					<template #title>{{
-						t('profile.detail.title', { username: profileUsername })
-					}}</template>
-					<PostDetail
-						@translate="translatePost"
-						:profile-avatar="profileAvatar"
-						:post-data="post"
-						:profile-username="profileUsername"
-						:get-img-srcset="getImgSrcset"
-					/>
-				</AppModal>
+				<Teleport to="#app">
+					<AppModal
+						v-if="openModalId === post._id"
+						width="fit-content"
+						@close="openModalId = ''"
+					>
+						<template #title>{{
+							t('profile.detail.title', { username: profileUsername })
+						}}</template>
+						<PostDetail
+							@translate="translatePost"
+							:profile-avatar="profileAvatar"
+							:post-data="post"
+							:profile-username="profileUsername"
+							:get-img-srcset="getImgSrcset"
+						/>
+					</AppModal>
+				</Teleport>
 			</template>
 		</div>
 		<div ref="loadMoreTrigger" class="load-more-trigger"></div>

@@ -1,30 +1,28 @@
 <template>
-	<Teleport :to="teleportTo">
-		<div
-			@focusin.stop
-			@keydown.esc="emit('close')"
-			v-bind="$attrs"
-			v-focus
-			ref="modal"
-			tabindex="-1"
-			class="modal text-primary"
-		>
-			<div v-if="hasBackdrop" class="modal-backdrop" @click="emit('close')"></div>
-			<div class="modal-content bg-default d-flex" :style="{ width }">
-				<div class="modal-header">
-					<h2 class="modal-title">
-						<slot name="title"></slot>
-					</h2>
-					<button @click="emit('close')" class="close-btn btn text-primary">
-						<GSymbol style="font-size: 30px">close</GSymbol>
-					</button>
-				</div>
-				<div class="modal-body">
-					<slot></slot>
-				</div>
+	<div
+		@focusin.stop
+		@keydown.esc="emit('close')"
+		v-bind="$attrs"
+		v-focus
+		ref="modal"
+		tabindex="-1"
+		class="modal text-primary"
+	>
+		<div v-if="hasBackdrop" class="modal-backdrop" @click="emit('close')"></div>
+		<div class="modal-content bg-default d-flex" :style="{ width }">
+			<div class="modal-header">
+				<h2 class="modal-title">
+					<slot name="title"></slot>
+				</h2>
+				<button @click="emit('close')" class="close-btn btn text-primary">
+					<GSymbol style="font-size: 30px">close</GSymbol>
+				</button>
+			</div>
+			<div class="modal-body">
+				<slot></slot>
 			</div>
 		</div>
-	</Teleport>
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -34,7 +32,6 @@
 
 	// types
 	type Props = {
-		teleportTo?: string
 		width?: string
 		hasBackdrop?: boolean
 	}
@@ -43,11 +40,7 @@
 	}
 
 	// props
-	const {
-		teleportTo = 'body',
-		width = 'min(393px, 100%)',
-		hasBackdrop = true,
-	} = defineProps<Props>()
+	const { width = 'min(393px, 100%)', hasBackdrop = true } = defineProps<Props>()
 
 	// emits
 	const emit = defineEmits<Emits>()
