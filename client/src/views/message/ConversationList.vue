@@ -1,10 +1,10 @@
 <template>
 	<ul class="conversation-list bg-default d-inline-flex">
-		<AppModal v-model="isModalOpen">
-			<template #header>{{ t('message.newMessage') }}</template>
-			<template #button>
-				<GSymbol class="text-primary" style="font-size: 30px">edit_square</GSymbol>
-			</template>
+		<button type="button" @click="isModalOpen = !isModalOpen">
+			<GSymbol class="text-primary" style="font-size: 30px">edit_square</GSymbol>
+		</button>
+		<AppModal v-if="isModalOpen" @close="isModalOpen = false">
+			<template #title>{{ t('message.newMessage') }}</template>
 			<CreateChatPanel @open-conversation="openConversation" />
 		</AppModal>
 		<li
