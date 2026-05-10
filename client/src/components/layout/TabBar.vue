@@ -22,13 +22,22 @@
 					<GSymbol font-size="30px">language</GSymbol>
 				</template>
 			</AppDropdown>
-			<OffCanvas class="btn" :teleport-to="'#app'">
-				<template #button>
-					<GSymbol style="font-size: 30px">notifications</GSymbol>
-				</template>
-				<template #header>{{ t('navbar.notification.title') }}</template>
-				<NotificationList />
-			</OffCanvas>
+			<button
+				type="button"
+				class="btn text-primary"
+				@click="isOffCanvasOpen = !isOffCanvasOpen"
+			>
+				<GSymbol style="font-size: 30px">notifications</GSymbol>
+			</button>
+			<Teleport to="#app">
+				<FadeTranslate transition-direction="right">
+					<OffCanvas v-if="isOffCanvasOpen" @close="isOffCanvasOpen = false">
+						<template #title>{{ t('navbar.notification.title') }}</template>
+						<NotificationList />
+					</OffCanvas>
+				</FadeTranslate>
+			</Teleport>
+
 			<button class="btn text-primary" type="button" @click="isModalOpen = !isModalOpen">
 				<GSymbol style="font-size: 30px">add_2</GSymbol>
 			</button>
@@ -68,6 +77,7 @@
 	import { useAuth } from '@/composables/useAuth'
 	import { useRouter } from 'vue-router'
 	import LogoIcon from '../icons/LogoIcon.vue'
+	import FadeTranslate from '../transitions/FadeTranslate.vue'
 
 	// stores
 	const authStore = useAuthStore()
@@ -88,6 +98,7 @@
 	]
 
 	const isModalOpen = ref(false)
+	const isOffCanvasOpen = ref(false)
 
 	const handleLogout = () => {
 		logout()
