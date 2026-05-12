@@ -72,7 +72,6 @@
 			if (!/[A-Z]/.test(value)) return t('validation.password.requireUppercase')
 			if (!/[0-9]/.test(value)) return t('validation.password.requireNumber')
 			if (!/^[\x21-\x7E]+$/.test(value)) return '只能包含英文字母、數字與常見符號'
-
 			return ''
 		},
 		'signup-full-name': (value) => {
