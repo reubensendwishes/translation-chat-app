@@ -2,8 +2,8 @@
 	<AuthPanel
 		feature="login"
 		:auth-prompt="authPrompt"
-		:input-datas="inputDatas"
-		:is-loading="isLoading"
+		:field-datas="fieldDatas"
+		:is-submitting="isSubmitting"
 		:form-error="formError"
 		@submit="handleSubmit"
 	/>
@@ -17,9 +17,9 @@
 	import { useI18n } from 'vue-i18n'
 
 	import AuthPanel from '@/components/auth/Panel.vue'
-	import type { InputData } from '@/components/ui/FloatLabelInput.vue'
 	import { useAuth } from '@/composables/useAuth'
 	import { useAuthStore } from '@/stores/AuthStore'
+	import type { FieldData } from '@/types'
 
 	// router
 	const route = useRoute()
@@ -42,7 +42,7 @@
 			linkAdviceText: t('auth.signUp'),
 		}
 	})
-	const inputDatas: InputData[] = [
+	const fieldDatas: FieldData[] = [
 		{ type: 'text', id: 'login-identifier', label: 'usernameOrEmail' },
 		{
 			type: 'password',
@@ -50,7 +50,7 @@
 			label: 'password',
 		},
 	]
-	const isLoading = ref<boolean>(false)
+	const isSubmitting = ref<boolean>(false)
 	const formError = ref<string>('')
 
 	const validateRedirect = (path?: LocationQueryValue | LocationQueryValue[]): string | null => {
@@ -65,8 +65,8 @@
 	}
 
 	const handleSubmit = async (formData: Record<string, string>) => {
-		if (isLoading.value) return
-		isLoading.value = true
+		if (isSubmitting.value) return
+		isSubmitting.value = true
 		formError.value = ''
 
 		const result = await login(formData['login-identifier'], formData['login-password'])
@@ -83,7 +83,7 @@
 			formError.value = result.detail || 'Login failed'
 		}
 
-		isLoading.value = false
+		isSubmitting.value = false
 	}
 	onMounted(() => {
 		validateRedirect()
