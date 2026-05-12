@@ -1,72 +1,71 @@
 <template>
-	<div
-		class="float-label-group text-muted"
-		:style="{
-			'--input-padding-x': inputStyle.paddingX + 'px',
-			'--input-padding-top': paddingTop + 'px',
-			'--input-height': inputStyle.height + 'px',
-			'--input-font-size': inputStyle.fontSize + 'px',
-			'--label-translate-y': labelTranslateY + 'px',
-			'--label-scale': labelScale,
-		}"
-	>
-		<input
-			class="float-input text-muted"
-			:class="{ 'invalid-input': validationData?.state === 'invalid' }"
-			:id="inputData.id"
-			:type="inputData.type"
-			v-model="model"
-			@[inputEvent]="emit('blur')"
-		/>
-		<label class="float-label" :class="{ floating: isFloating }" :for="inputData.id">{{
-			t('auth.' + inputData.label)
-		}}</label>
-		<GSymbol
-			v-show="validationData && validationData?.state !== 'unverified'"
-			class="status-icon"
-			font-size="20px"
-			:class="statusIconClass"
-		>
-			{{ statusIconType }}
-		</GSymbol>
-		<span v-if="validationData?.state === 'invalid'" class="invalid-feedback text-warning">
-			{{ validationData?.invalidFeedback }}
+	<div class="float-label-group text-muted">
+		<div :class="validationData?.state === 'invalid' && 'invalid'" class="input-wrapper d-flex">
+			<input
+				class="float-input text-muted"
+				:id="fieldData.id"
+				:type="fieldType"
+				v-model="model"
+				@[inputEvent]="emit('blur')"
+				@input="emit('input')"
+			/>
+			<label class="float-label" :class="model && 'floating'" :for="fieldData.id">{{
+				t('auth.' + fieldData.label)
+			}}</label>
+
+			<div class="status-icon-wrapper">
+				<GSymbol
+					v-if="validationData?.state === 'valid'"
+					class="status-icon"
+					font-size="20px"
+				>
+					check_circle
+				</GSymbol>
+				<GSymbol
+					v-else-if="validationData?.state === 'invalid'"
+					class="status-icon text-warning"
+					font-size="20px"
+				>
+					cancel
+				</GSymbol>
+			</div>
+
+			<button
+				v-if="fieldData.type === 'password'"
+				@click="isPasswordVisible = !isPasswordVisible"
+				class="visibility-toggle-btn text-muted"
+				type="button"
+			>
+				<GSymbol v-show="isPasswordVisible">visibility</GSymbol>
+				<GSymbol v-show="!isPasswordVisible">visibility_off</GSymbol>
+			</button>
+		</div>
+
+		<span v-if="validationData?.state === 'invalid'" class="field-error text-warning">
+			{{ validationData?.error }}
 		</span>
 	</div>
 </template>
 
 <script setup lang="ts">
-	import { computed } from 'vue'
+	import { ref, computed } from 'vue'
 	import { useI18n } from 'vue-i18n'
 
-	import GSymbol from '../icons/GSymbol.vue'
+	import GSymbol from '@/components/icons/GSymbol.vue'
+	import type { FieldData, ValidationData } from '../../types.ts'
 
 	// types
-	export type InputData = {
-		type: 'text' | 'email' | 'password'
-		id: string
-		label: string
-	}
-	export type InputStyle = {
-		paddingX: number
-		fontSize: number
-		height: number
-	}
-	export type ValidationData = {
-		state: 'valid' | 'invalid' | 'unverified'
-		invalidFeedback: string
-	}
 	type Props = {
-		inputData: InputData
-		inputStyle: InputStyle
+		fieldData: FieldData
 		validationData?: ValidationData
 	}
 	type Emits = {
 		blur: []
+		input: []
 	}
 
 	// props
-	const { inputData, inputStyle, validationData } = defineProps<Props>()
+	const { fieldData, validationData } = defineProps<Props>()
 
 	// emits
 	const emit = defineEmits<Emits>()
@@ -77,76 +76,65 @@
 	// vue-i18n
 	const { t } = useI18n()
 
-	const labelScale: number = 0.8
-	const labelTranslateY = computed(() => {
-		return (-(inputStyle.height - inputStyle.fontSize) / 2) * labelScale
-	})
-	const paddingTop = computed(() => {
-		return (
-			(inputStyle.height - inputStyle.fontSize) / 2 +
-			labelTranslateY.value +
-			inputStyle.fontSize * labelScale
-		)
-	})
-	const isFloating = computed<boolean>(() => {
-		return model.value !== ''
-	})
-	const statusIconClass = computed(() => {
-		if (validationData?.state === 'invalid') {
-			return 'text-warning'
-		}
-		return ''
-	})
 	const inputEvent = computed(() => {
 		return validationData ? 'blur' : null
 	})
-	const statusIconType = computed(() => {
-		if (validationData?.state === 'invalid') {
-			return 'cancel'
-		} else if (validationData?.state === 'valid') {
-			return 'check_circle'
-		}
-		return ''
+
+	const isPasswordVisible = ref(false)
+
+	const fieldType = computed(() => {
+		if (isPasswordVisible.value) return 'text'
+		return fieldData.type
 	})
 </script>
 
-<style scoped>
+<style>
 	.float-label-group {
+		font-size: 16px;
+	}
+	.float-label-group > .input-wrapper {
 		position: relative;
-
-		font-size: var(--input-font-size);
+		gap: 8px;
+		border-radius: 3px;
+		border: 1px solid var(--color-text-muted);
+	}
+	.float-label-group > .input-wrapper.invalid-input {
+		border-color: var(--color-text-warning);
+	}
+	.float-label-group > .input-wrapper > *:last-child {
+		margin-right: 8px;
 	}
 	.float-input {
 		width: 100%;
-		height: var(--input-height);
+		height: 38px;
 		outline: none;
-		border: 1px solid var(--color-text-muted);
-		border-radius: 3px;
-		font-size: inherit;
-		padding-top: var(--input-padding-top);
-		padding-left: var(--input-padding-x);
-		padding-right: var(--input-padding-x);
+		border: none;
+		padding: 15px 8px 1px;
+		font: inherit;
 	}
-	.float-input.invalid-input {
-		border-color: var(--color-text-warning);
+	.float-input:-webkit-autofill {
+		-webkit-text-fill-color: var(--color-text-muted);
+		-webkit-box-shadow: 0 0 0 1000px var(--color-bg-default) inset;
 	}
 	.float-label {
 		position: absolute;
-		transform-origin: left;
-		line-height: var(--input-height);
-		left: var(--input-padding-x);
+		transform-origin: top left;
+		line-height: 38px;
+		left: 8px;
 		transition: transform 0.2s ease;
+		pointer-events: none;
 	}
 	.float-input:focus + .float-label,
 	.float-label.floating {
-		transform: translateY(var(--label-translate-y)) scale(var(--label-scale));
+		transform: scale(0.75) translateY(-8px);
 	}
-	.status-icon {
-		position: absolute;
-		right: var(--input-padding-x);
-		line-height: var(--input-height);
+	.status-icon-wrapper {
+		width: 30px;
 	}
-	.invalid-feedback {
-		font-size: calc(var(--input-font-size) - 3px);
+	.float-label-group .status-icon {
+		line-height: 38px;
+	}
+	.float-label-group > .field-error {
+		font-size: 12px;
 	}
 </style>

@@ -24,22 +24,22 @@
 			</div>
 
 			<FloatLabelInput
-				v-for="inputData in inputDatas"
-				:key="inputData.id"
-				:input-data="inputData"
-				:input-style="inputStyle"
-				:validation-data="validationDatas?.[inputData.id]"
-				v-model="formData[inputData.id]"
-				@[inputEvent]="$emit('blur', inputData.id, formData[inputData.id])"
+				v-for="fieldData in fieldDatas"
+				:key="fieldData.id"
+				:field-data="fieldData"
+				:validation-data="validationDatas?.[fieldData.id]"
+				v-model="formData[fieldData.id]"
+				@blur="$emit('validate:field', fieldData.id, formData[fieldData.id])"
+				@input="$emit('input', fieldData.id)"
 				class="auth-input-group"
 			/>
 			<button
 				:disabled="submitDisabled"
 				class="btn submit-btn text-inverse"
-				:class="isLoading ? 'bg-muted' : 'bg-inverse'"
+				:class="isSubmitting ? 'bg-muted' : 'bg-inverse'"
 				type="submit"
 			>
-				<span v-if="!isLoading">{{ buttonText }}</span>
+				<span v-if="!isSubmitting">{{ buttonText }}</span>
 				<span v-else>
 					<SpinnerIcon
 						spinner-color="inverse"
@@ -55,50 +55,50 @@
 			</div>
 			<div class="auth-feedback text-warning">{{ formError }}</div>
 		</form>
-		<div class="auth-cta text-muted">
-			{{ authCta.content }}
-			<RouterLink class="text-primary" :to="{ name: authCta.linkAdviceName }">
-				{{ authCta.linkAdviceText }}
+		<div class="auth-prompt text-muted">
+			{{ authPrompt.content }}
+			<RouterLink class="text-primary" :to="{ name: authPrompt.linkAdviceName }">
+				{{ authPrompt.linkAdviceText }}
 			</RouterLink>
 		</div>
 	</main>
 </template>
 
 <script setup lang="ts">
-	import { computed, onMounted, ref } from 'vue'
+	import { computed, ref } from 'vue'
+	import { useI18n } from 'vue-i18n'
 
 	import LogoText from '@/components/icons/LogoText.vue'
-	import type { InputData, InputStyle, ValidationData } from '@/components/ui/FloatLabelInput.vue'
 	import FloatLabelInput from '@/components/ui/FloatLabelInput.vue'
 	import SpinnerIcon from '@/components/icons/SpinnerIcon.vue'
-	import GSymbol from '../icons/GSymbol.vue'
-	import AppDropdown from '../ui/AppDropdown.vue'
-	import type { DropdownItem } from '@/types'
-	import { useI18n } from 'vue-i18n'
+	import GSymbol from '@/components/icons/GSymbol.vue'
+	import AppDropdown from '@/components/ui/AppDropdown.vue'
+	import type { DropdownItem, FieldData, ValidationDatas } from '@/types'
 
 	// types
 	type AuthFeature = 'login' | 'signUp'
-	export type AuthCta = {
+	export type AuthPrompt = {
 		content: string
 		linkAdviceName: string
 		linkAdviceText: string
 	}
-	export type ValidationDatas = Record<string, ValidationData>
+
 	type Props = {
 		feature: AuthFeature
-		authCta: AuthCta
-		inputDatas: InputData[]
+		authPrompt: AuthPrompt
+		fieldDatas: FieldData[]
 		validationDatas?: ValidationDatas
-		isLoading: boolean
+		isSubmitting: boolean
 		formError: string
 	}
 	type Emits = {
-		blur: [id: string, value: string]
+		'validate:field': [id: string, value: string]
 		submit: [formData: Record<string, string>]
+		input: [id: string]
 	}
 
 	// props
-	const { authCta, feature, inputDatas, validationDatas, isLoading, formError } =
+	const { authPrompt, feature, fieldDatas, validationDatas, isSubmitting, formError } =
 		defineProps<Props>()
 
 	// emits
@@ -110,37 +110,24 @@
 	const buttonText = computed(() => {
 		return t('auth.' + feature)
 	})
-	const inputStyle: InputStyle = {
-		paddingX: 8,
-		fontSize: 15,
-		height: 40,
-	}
-	const formData = ref<Record<string, string>>({})
-	const inputEvent = computed(() => {
-		return validationDatas ? 'blur' : null
-	})
-
+	const formData = ref<Record<string, string>>(
+		Object.fromEntries(fieldDatas.map((fieldData) => [fieldData.id, ''])),
+	)
 	const submitDisabled = computed(() => {
 		if (validationDatas) {
 			return (
 				Object.values(validationDatas).some((item) => item.state === 'invalid') ||
-				isLoading ||
-				Object.values(formData.value).some((item) => item === '')
+				isSubmitting ||
+				Object.values(formData.value).some((item) => item)
 			)
 		}
-		return isLoading || Object.values(formData.value).some((item) => item === '')
+		return isSubmitting || Object.values(formData.value).some((item) => item === '')
 	})
 
 	const languageItems: DropdownItem[] = [
 		{ text: 'Tiếng Việt', value: 'vi' },
 		{ text: '繁體中文', value: 'zh-TW' },
 	]
-
-	onMounted(() => {
-		inputDatas.forEach((inputData) => {
-			formData.value[inputData.id] = ''
-		})
-	})
 </script>
 
 <style scoped>
@@ -158,7 +145,7 @@
 		padding: 50px 40px 20px;
 		margin-bottom: 10px;
 	}
-	.logo-wrapper {
+	.auth-form > .logo-wrapper {
 		align-self: center;
 		margin-bottom: 30px;
 		gap: 10px;
@@ -175,11 +162,11 @@
 		height: 32px;
 		font-size: 16px;
 	}
-	.auth-form button[type='submit']:disabled,
-	.auth-form button[type='submit']:disabled:hover {
+	.auth-form .submit-btn:disabled,
+	.auth-form .submit-btn:disabled:hover {
 		background-color: var(--color-text-muted);
 	}
-	.auth-form button[type='submit']:hover {
+	.auth-form .submit-btn:hover {
 		background-color: var(--color-primary-darken);
 	}
 	.auth-divider {
@@ -193,7 +180,7 @@
 	.auth-feedback {
 		font-size: 13px;
 	}
-	.auth-cta {
+	.auth-prompt {
 		padding: 20px 40px;
 		text-align: center;
 		border: 1px solid var(--color-text-muted);

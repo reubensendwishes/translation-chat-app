@@ -94,7 +94,7 @@
   "auth": {
     "login": "Đăng nhập",
     "signUp": "Đăng ký",
-    "ctn": {
+    "prompt": {
       "alreadyAccount": "Bạn đã có tài khoản chưa?",
       "noAccount": "Bạn chưa có tài khoản?"
     },
@@ -116,7 +116,8 @@
       "minLength": "Mật khẩu phải có ít nhất 6 ký tự",
       "requireLowercase": "Mật khẩu phải có ít nhất 1 chữ cái thường",
       "requireUppercase": "Mật khẩu phải có ít nhất 1 chữ cái hoa",
-      "requireNumber": "Mật khẩu phải có ít nhất 1 chữ số"
+      "requireNumber": "Mật khẩu phải có ít nhất 1 chữ số",
+      "invalidCharacters": "Chỉ bao gồm chữ cái tiếng Anh, số và ký tự thông dụng"
     },
     "fullName": {
       "maxLength": "Tên đầy đủ không được vượt quá 64 ký tự"

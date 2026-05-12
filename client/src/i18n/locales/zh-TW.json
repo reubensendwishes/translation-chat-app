@@ -92,7 +92,7 @@
   "auth": {
     "login": "登入",
     "signUp": "註冊",
-    "ctn": {
+    "prompt": {
       "alreadyAccount": "已經有帳號了嗎？",
       "noAccount": "沒有帳號嗎？"
     },
@@ -114,7 +114,8 @@
       "minLength": "密碼至少需要6個字元",
       "requireLowercase": "密碼至少需要1個小寫字母",
       "requireUppercase": "密碼至少需要1個大寫字母",
-      "requireNumber": "密碼至少需要1個數字"
+      "requireNumber": "密碼至少需要1個數字",
+      "invalidCharacters": "只能包含英文字母、數字與常見符號"
     },
     "fullName": {
       "maxLength": "全名不能超過64個字元"
