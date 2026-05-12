@@ -20,6 +20,18 @@ export type Image = {
 	src: string
 }
 
+export type FieldData = {
+	type: string
+	id: string
+	label: string
+}
+
+export type ValidationData = {
+	state: 'valid' | 'invalid' | 'unverified'
+	error: string
+}
+export type ValidationDatas = Record<string, ValidationData>
+
 export type BaseField = {
 	label: string
 	value: string

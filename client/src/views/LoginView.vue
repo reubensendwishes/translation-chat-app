@@ -1,7 +1,7 @@
 <template>
 	<AuthPanel
 		feature="login"
-		:auth-cta="authCta"
+		:auth-prompt="authPrompt"
 		:input-datas="inputDatas"
 		:is-loading="isLoading"
 		:form-error="formError"
@@ -35,9 +35,9 @@
 	// vue-i18n
 	const { t } = useI18n()
 
-	const authCta = computed(() => {
+	const authPrompt = computed(() => {
 		return {
-			content: t('auth.ctn.noAccount'),
+			content: t('auth.prompt.noAccount'),
 			linkAdviceName: 'signUp',
 			linkAdviceText: t('auth.signUp'),
 		}
