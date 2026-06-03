@@ -1,1 +1,0 @@
-import{J as t,k as n,l as o,h as s}from"./index-KpXC3h2s.js";const r={},a={class:"not-found-container"};function c(d,e){return s(),n("div",a,[...e[0]||(e[0]=[o("strong",{class:"text-warning"},"抱歉，找不到此頁面",-1)])])}const _=t(r,[["render",c]]);export{_ as default};
