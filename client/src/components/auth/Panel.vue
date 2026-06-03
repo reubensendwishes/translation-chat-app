@@ -118,7 +118,7 @@
 			return (
 				Object.values(validationDatas).some((item) => item.state === 'invalid') ||
 				isSubmitting ||
-				Object.values(formData.value).some((item) => item)
+				Object.values(formData.value).some((item) => item === '')
 			)
 		}
 		return isSubmitting || Object.values(formData.value).some((item) => item === '')
