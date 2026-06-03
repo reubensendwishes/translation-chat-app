@@ -80,7 +80,7 @@
 		},
 		'signup-username': async (value) => {
 			if (value.length > 30) return t('validation.username.maxLength')
-			if (!/^[a-zA-Z0-9_-]+$/.test(value)) return t('username.invalidCharacters')
+			if (!/^[a-zA-Z0-9_-]+$/.test(value)) return t('validation.username.invalidCharacters')
 			try {
 				const res = await axios.get('/api/auth/check-username', {
 					params: { username: value },
